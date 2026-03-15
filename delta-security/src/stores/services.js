@@ -11,6 +11,7 @@ export const useServicesStore = defineStore('services', () => {
   const myServices    = ref([])
   const allServices   = ref([])
   const allProfiles   = ref([])
+  const allGrades     = ref([])
   const activeService = ref(null)
   const loading       = ref(false)
 
@@ -38,17 +39,60 @@ export const useServicesStore = defineStore('services', () => {
     loading.value = true
     const { data, error } = await supabase
       .from('services')
-      .select('*, profiles(full_name, role, badge_number, hourly_rate)')
+      .select('*, profiles(full_name, role, badge_number, hourly_rate, grade_id)')
       .order('start_time', { ascending: false }).limit(500)
     if (!error) allServices.value = data
     loading.value = false
   }
 
-  // ── Tous les profils ───────────────────────────────────────
+  // ── Tous les profils avec grade ────────────────────────────
   async function fetchAllProfiles() {
     const { data } = await supabase
-      .from('profiles').select('*').order('full_name')
+      .from('profiles')
+      .select('*, grades(slug, label, hourly_rate, sort_order)')
+      .order('full_name')
     allProfiles.value = data ?? []
+  }
+
+  // ── Tous les grades ────────────────────────────────────────
+  async function fetchGrades() {
+    const { data } = await supabase
+      .from('grades')
+      .select('*')
+      .order('sort_order')
+    allGrades.value = data ?? []
+  }
+
+  // ── Mettre à jour le taux d'un grade ──────────────────────
+  async function updateGradeRate(gradeId, hourlyRate) {
+    const { error } = await supabase
+      .from('grades')
+      .update({ hourly_rate: hourlyRate })
+      .eq('id', gradeId)
+    if (error) throw error
+    const idx = allGrades.value.findIndex(g => g.id === gradeId)
+    if (idx !== -1) allGrades.value[idx].hourly_rate = hourlyRate
+    // Update profiles that use this grade
+    allProfiles.value.forEach(p => {
+      if (p.grade_id === gradeId) p.hourly_rate = hourlyRate
+    })
+  }
+
+  // ── Assigner un grade à un profil ─────────────────────────
+  async function assignGrade(profileId, gradeId) {
+    const grade = allGrades.value.find(g => g.id === gradeId)
+    if (!grade) throw new Error('Grade introuvable')
+    const { error } = await supabase
+      .from('profiles')
+      .update({ grade_id: gradeId, hourly_rate: grade.hourly_rate })
+      .eq('id', profileId)
+    if (error) throw error
+    const idx = allProfiles.value.findIndex(p => p.id === profileId)
+    if (idx !== -1) {
+      allProfiles.value[idx].grade_id   = gradeId
+      allProfiles.value[idx].hourly_rate = grade.hourly_rate
+      allProfiles.value[idx].grades      = grade
+    }
   }
 
   // ── Prise de service ───────────────────────────────────────
@@ -104,7 +148,7 @@ export const useServicesStore = defineStore('services', () => {
     }))
   }
 
-  // ── Stats patron : semaine courante ────────────────────────
+  // ── Stats patron ───────────────────────────────────────────
   function getWeekStats() {
     const start = dayjs().startOf('isoWeek')
     const end   = dayjs().endOf('isoWeek')
@@ -122,28 +166,26 @@ export const useServicesStore = defineStore('services', () => {
     const weekMinutes = weekServices.reduce((a, s) => a + (s.duration_minutes || 0), 0)
 
     const weekPayroll = allProfiles.value.reduce((total, p) => {
-      const mins = weekServices
-        .filter(s => s.user_id === p.id)
+      const mins = weekServices.filter(s => s.user_id === p.id)
         .reduce((a, s) => a + (s.duration_minutes || 0), 0)
       return total + Math.floor(mins / 10) * (p.hourly_rate / 6)
     }, 0)
 
-    const todayServices = allServices.value.filter(s => {
-      if (!s.end_time) return false
-      return dayjs(s.start_time).isSame(dayjs(), 'day')
-    }).length
+    const todayServices = allServices.value.filter(s =>
+      s.end_time && dayjs(s.start_time).isSame(dayjs(), 'day')
+    ).length
 
     return {
       agentsOnDuty,
       weekMinutes,
-      weekHours: `${Math.floor(weekMinutes / 60)}h${String(weekMinutes % 60).padStart(2, '0')}`,
+      weekHours: `${Math.floor(weekMinutes / 60)}h${String(weekMinutes % 60).padStart(2,'0')}`,
       weekPayroll: weekPayroll.toFixed(2),
       todayServices,
       totalServices: weekServices.length
     }
   }
 
-  // ── Stats agent : semaine courante ─────────────────────────
+  // ── Stats agent ────────────────────────────────────────────
   function getMyWeekStats(userId, hourlyRate) {
     const start = dayjs().startOf('isoWeek')
     const end   = dayjs().endOf('isoWeek')
@@ -155,25 +197,24 @@ export const useServicesStore = defineStore('services', () => {
     })
 
     const weekMinutes = weekServices.reduce((a, s) => a + (s.duration_minutes || 0), 0)
-    const estimatedSalary = +(Math.floor(weekMinutes / 10) * (hourlyRate / 6)).toFixed(2)
 
     return {
       weekServices: weekServices.length,
       weekMinutes,
-      weekHours: `${Math.floor(weekMinutes / 60)}h${String(weekMinutes % 60).padStart(2, '0')}`,
-      estimatedSalary
+      weekHours: `${Math.floor(weekMinutes / 60)}h${String(weekMinutes % 60).padStart(2,'0')}`,
+      estimatedSalary: +(Math.floor(weekMinutes / 10) * ((hourlyRate ?? 15) / 6)).toFixed(2)
     }
   }
 
-  // ── Export CSV salaires ────────────────────────────────────
+  // ── Export CSV ─────────────────────────────────────────────
   function exportSalariesCSV(weekStart) {
     const salaries = computeWeeklySalaries(weekStart)
     const label    = dayjs(weekStart).startOf('isoWeek').format('YYYY-MM-DD')
 
-    const header = ['Nom', 'Rôle', 'Badge', 'Services', 'Minutes totales', 'Tranches 10min', 'Taux $/h', 'Salaire $']
+    const header = ['Nom', 'Grade', 'Badge', 'Services', 'Minutes', 'Tranches 10min', 'Taux $/h', 'Salaire $']
     const rows   = salaries.map(e => [
       e.full_name,
-      e.role,
+      e.grades?.label || e.role,
       e.badge_number || '',
       e.total_services,
       e.total_minutes,
@@ -182,17 +223,16 @@ export const useServicesStore = defineStore('services', () => {
       e.weekly_salary
     ])
 
-    const csv     = [header, ...rows].map(r => r.join(',')).join('\n')
-    const blob    = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' })
-    const url     = URL.createObjectURL(blob)
-    const link    = document.createElement('a')
-    link.href     = url
+    const csv  = [header, ...rows].map(r => r.join(',')).join('\n')
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' })
+    const url  = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
     link.download = `delta-security-salaires-${label}.csv`
     link.click()
     URL.revokeObjectURL(url)
   }
 
-  // ── Formatage durée ────────────────────────────────────────
   function formatDuration(minutes) {
     if (!minutes) return '—'
     const h = Math.floor(minutes / 60)
@@ -202,8 +242,9 @@ export const useServicesStore = defineStore('services', () => {
   }
 
   return {
-    myServices, allServices, allProfiles, activeService, loading,
+    myServices, allServices, allProfiles, allGrades, activeService, loading,
     fetchActiveService, fetchMyServices, fetchAllServices, fetchAllProfiles,
+    fetchGrades, updateGradeRate, assignGrade,
     startService, endService,
     computeWeeklySalaries, getWeekStats, getMyWeekStats,
     exportSalariesCSV, formatDuration

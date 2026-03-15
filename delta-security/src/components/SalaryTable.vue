@@ -54,7 +54,7 @@
                 class="transition-colors duration-150 hover:bg-white hover:bg-opacity-[0.02]">
               <td class="px-5 py-4">
                 <p class="font-body text-sm font-medium" style="color: #F5F5F0;">{{ emp.full_name }}</p>
-                <p class="font-body text-xs mt-0.5" style="color: #555;">{{ emp.role }}</p>
+                <p class="font-body text-xs mt-0.5" style="color: #555;">{{ emp.grades?.label || emp.role }}</p>
               </td>
               <td class="px-5 py-4">
                 <span class="font-body text-xs tabular-nums" style="color: #666;">{{ emp.badge_number || '—' }}</span>

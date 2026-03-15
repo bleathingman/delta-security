@@ -17,13 +17,16 @@
         </div>
         <div class="text-right hidden sm:flex flex-col items-end gap-2">
           <p class="font-display text-2xl" style="color: #B8C4D0;">{{ weekLabel }}</p>
+          <p v-if="profile?.grades?.label" class="text-xs font-body tracking-[0.15em] uppercase" style="color: #555;">
+            {{ profile.grades.label }}
+          </p>
           <button @click="showChangePwd = true"
                   class="text-xs font-body tracking-[0.1em] uppercase transition-colors duration-200"
                   style="color: #444;"
                   onmouseover="this.style.color='#B8C4D0'" onmouseout="this.style.color='#444'">
             🔑 Changer mon mot de passe
           </button>
-        </div> 
+        </div>
       </div>
 
       <!-- ── Stats ───────────────────────────────────────────── -->

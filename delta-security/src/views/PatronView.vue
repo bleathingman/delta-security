@@ -197,6 +197,11 @@
         </div>
       </div>
 
+      <!-- ── Tab: Grades ─────────────────────────────────────── -->
+      <div v-if="activeTab === 'grades'" class="fade-up delay-200">
+        <GradesManager />
+      </div>
+
       <!-- ── Tab: Comptes ────────────────────────────────────── -->
       <div v-if="activeTab === 'comptes'" class="fade-up delay-200">
 
@@ -265,6 +270,16 @@
               <input v-model="newUser.badge_number" type="text" placeholder="ex: DS-042" class="ds-input" />
             </div>
             <div class="pt-2">
+            <div v-if="newUser.role === 'agent'">
+              <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Grade</label>
+              <select v-model="newUser.grade_id" class="ds-input">
+                <option value="">— Sélectionner un grade —</option>
+                <option v-for="g in agentGrades" :key="g.id" :value="g.id">
+                  {{ g.label }} ({{ g.hourly_rate }}$/h)
+                </option>
+              </select>
+            </div>
+
               <button @click="handleCreateUser" class="btn-gold w-full" :disabled="creatingUser">
                 <span v-if="creatingUser" class="inline-flex items-center justify-center gap-2">
                   <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -411,6 +426,7 @@ import ServiceCard from '@/components/ServiceCard.vue'
 import SalaryTable from '@/components/SalaryTable.vue'
 import ChangePasswordModal from '@/components/ChangePasswordModal.vue'
 import ConfirmModal from '@/components/ConfirmModal.vue'
+import GradesManager from '@/components/GradesManager.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useServicesStore } from '@/stores/services'
 import { supabase } from '@/lib/supabase'
@@ -425,6 +441,7 @@ const tabs = [
   { id: 'services', label: 'Services' },
   { id: 'salaires', label: 'Salaires' },
   { id: 'equipe', label: 'Équipe' },
+  { id: 'grades', label: 'Grades' },
   { id: 'comptes', label: 'Comptes' }
 ]
 const activeTab = ref('services')
@@ -445,7 +462,7 @@ const newRate = ref(0)
 const savingRate = ref(false)
 
 // ── Create user ────────────────────────────────────────────
-const newUser = ref({ full_name: '', username: '', password: '', role: 'agent', hourly_rate: 15, badge_number: '' })
+const newUser = ref({ full_name: '', username: '', password: '', role: 'agent', hourly_rate: 15, badge_number: '', grade_id: '' })
 const creatingUser = ref(false)
 const createMsg = ref(null)
 const showNewPwd = ref(false)
@@ -460,6 +477,9 @@ const deleteTarget = ref(null)
 
 // ── Stats patron ──────────────────────────────────────
 const weekStats = computed(() => servicesStore.getWeekStats())
+
+// ── Grades ────────────────────────────────────────────
+const agentGrades = computed(() => servicesStore.allGrades.filter(g => g.slug !== 'patron'))
 
 // ── Computed ───────────────────────────────────────────────
 const liveServices = computed(() => allServices.value.filter(s => s.is_active))
@@ -557,9 +577,15 @@ async function handleCreateUser() {
   creatingUser.value = true
   createMsg.value = null
   try {
-    await callEdgeFunction('create-user', { full_name, username, password, role, hourly_rate: hourly_rate || 15, badge_number })
+    // Auto-fill hourly_rate from grade if selected
+    let finalRate = hourly_rate || 15
+    if (newUser.value.grade_id) {
+      const grade = servicesStore.allGrades.find(g => g.id === newUser.value.grade_id)
+      if (grade) finalRate = grade.hourly_rate
+    }
+    await callEdgeFunction('create-user', { full_name, username, password, role, hourly_rate: finalRate, badge_number, grade_id: newUser.value.grade_id || null })
     createMsg.value = { type: 'success', text: `Compte "${username}" créé avec succès pour ${full_name}.` }
-    newUser.value = { full_name: '', username: '', password: '', role: 'agent', hourly_rate: 15, badge_number: '' }
+    newUser.value = { full_name: '', username: '', password: '', role: 'agent', hourly_rate: 15, badge_number: '', grade_id: '' }
     await servicesStore.fetchAllProfiles()
     setTimeout(() => { createMsg.value = null }, 5000)
   } catch (e) {
@@ -613,6 +639,7 @@ onMounted(async () => {
     await servicesStore.fetchActiveService(profile.value.id)
     await servicesStore.fetchAllServices()
     await servicesStore.fetchAllProfiles()
+    await servicesStore.fetchGrades()
     if (activeService.value) startElapsedTimer()
   }
   supabase
