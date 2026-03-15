@@ -23,7 +23,7 @@
                   onmouseover="this.style.color='#B8C4D0'" onmouseout="this.style.color='#444'">
             🔑 Changer mon mot de passe
           </button>
-        </div>
+        </div> 
       </div>
 
       <!-- ── Stats ───────────────────────────────────────────── -->
