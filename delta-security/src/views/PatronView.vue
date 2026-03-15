@@ -251,19 +251,12 @@
                 </button>
               </div>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Rôle *</label>
-                <select v-model="newUser.role" class="ds-input">
-                  <option value="agent">Agent</option>
-                  <option value="patron">Patron</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Taux ($/h)</label>
-                <input v-model.number="newUser.hourly_rate" type="number" step="0.5" min="0"
-                       placeholder="15.00" class="ds-input" />
-              </div>
+            <div>
+              <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Rôle *</label>
+              <select v-model="newUser.role" class="ds-input">
+                <option value="agent">Agent</option>
+                <option value="patron">Patron</option>
+              </select>
             </div>
             <div>
               <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Numéro de badge</label>
