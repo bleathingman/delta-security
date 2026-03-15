@@ -262,7 +262,6 @@
               <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Numéro de badge</label>
               <input v-model="newUser.badge_number" type="text" placeholder="ex: DS-042" class="ds-input" />
             </div>
-            <div class="pt-2">
             <div v-if="newUser.role === 'agent'">
               <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Grade</label>
               <select v-model="newUser.grade_id" class="ds-input">
@@ -273,6 +272,7 @@
               </select>
             </div>
 
+            <div class="pt-4">
               <button @click="handleCreateUser" class="btn-gold w-full" :disabled="creatingUser">
                 <span v-if="creatingUser" class="inline-flex items-center justify-center gap-2">
                   <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
