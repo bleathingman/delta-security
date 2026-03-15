@@ -6,29 +6,29 @@
          style="background: linear-gradient(135deg, #0d0d0d 0%, #111111 100%); border-right: 1px solid #1a1a1a;">
 
       <div class="absolute top-8 left-8 w-16 h-16"
-           style="border-left: 1px solid #D4AF37; border-top: 1px solid #D4AF37; opacity: 0.4;"></div>
+           style="border-left: 1px solid #B8C4D0; border-top: 1px solid #B8C4D0; opacity: 0.4;"></div>
       <div class="absolute bottom-8 right-8 w-16 h-16"
-           style="border-right: 1px solid #D4AF37; border-bottom: 1px solid #D4AF37; opacity: 0.4;"></div>
+           style="border-right: 1px solid #B8C4D0; border-bottom: 1px solid #B8C4D0; opacity: 0.4;"></div>
 
       <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div class="w-80 h-80 rotate-45 opacity-[0.03]" style="border: 1px solid #D4AF37;"></div>
-        <div class="absolute w-56 h-56 rotate-45 opacity-[0.04]" style="border: 1px solid #D4AF37;"></div>
+        <div class="w-80 h-80 rotate-45 opacity-[0.03]" style="border: 1px solid #B8C4D0;"></div>
+        <div class="absolute w-56 h-56 rotate-45 opacity-[0.04]" style="border: 1px solid #B8C4D0;"></div>
       </div>
 
       <div class="fade-up">
         <div class="flex items-center gap-3 mb-2">
-          <div class="w-8 h-px" style="background: #D4AF37;"></div>
-          <span class="text-xs tracking-[0.3em] uppercase font-body" style="color: #D4AF37;">Établi depuis 2018</span>
+          <div class="w-8 h-px" style="background: #B8C4D0;"></div>
+          <span class="text-xs tracking-[0.3em] uppercase font-body" style="color: #B8C4D0;">Établi depuis 2018</span>
         </div>
         <h1 class="font-display text-7xl font-light leading-none mb-1" style="color: #F5F5F0;">Delta</h1>
-        <h2 class="font-display text-7xl font-light leading-none" style="color: #D4AF37;">Security</h2>
+        <h2 class="font-display text-7xl font-light leading-none" style="color: #B8C4D0;">Security</h2>
       </div>
 
       <div class="fade-up delay-300">
         <p class="font-display text-xl italic font-light mb-3" style="color: #888;">
           « La sécurité n'est pas un service.<br />C'est une garantie. »
         </p>
-        <div class="w-12 h-px" style="background: #D4AF37; opacity: 0.5;"></div>
+        <div class="w-12 h-px" style="background: #B8C4D0; opacity: 0.5;"></div>
       </div>
     </div>
 
@@ -38,12 +38,12 @@
 
         <div class="lg:hidden text-center mb-10">
           <h1 class="font-display text-5xl font-light" style="color: #F5F5F0;">
-            Delta <span style="color: #D4AF37;">Security</span>
+            Delta <span style="color: #B8C4D0;">Security</span>
           </h1>
         </div>
 
         <div class="mb-10">
-          <p class="text-xs tracking-[0.3em] uppercase mb-3 font-body" style="color: #D4AF37;">— Accès sécurisé</p>
+          <p class="text-xs tracking-[0.3em] uppercase mb-3 font-body" style="color: #B8C4D0;">— Accès sécurisé</p>
           <h3 class="font-display text-4xl font-light" style="color: #F5F5F0;">Connexion</h3>
           <p class="text-sm font-body mt-2" style="color: #555;">
             Utilisez vos identifiants fournis par l'administration

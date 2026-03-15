@@ -7,9 +7,9 @@
       <!-- ── Header ──────────────────────────────────────────── -->
       <div class="fade-up flex items-end justify-between flex-wrap gap-4">
         <div>
-          <p class="text-xs tracking-[0.3em] uppercase mb-2 font-body" style="color: #D4AF37;">— Direction</p>
+          <p class="text-xs tracking-[0.3em] uppercase mb-2 font-body" style="color: #B8C4D0;">— Direction</p>
           <h1 class="font-display text-5xl font-light" style="color: #F5F5F0;">
-            Vue <span style="color: #D4AF37;">Patron</span>
+            Vue <span style="color: #B8C4D0;">Patron</span>
           </h1>
         </div>
         <div class="flex items-center gap-2 flex-wrap">
@@ -17,7 +17,7 @@
                   @click="activeTab = tab.id"
                   class="font-body text-xs tracking-[0.15em] uppercase px-4 py-2 rounded-sm transition-all duration-200"
                   :style="activeTab === tab.id
-                    ? 'background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.4); color: #D4AF37;'
+                    ? 'background: rgba(184,196,208,0.12); border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;'
                     : 'background: transparent; border: 1px solid #242424; color: #666;'">
             {{ tab.label }}
           </button>
@@ -29,7 +29,7 @@
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 fade-up delay-100">
         <div class="ds-card text-center">
           <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Agents actifs</p>
-          <p class="font-display text-4xl font-light" style="color: #D4AF37;">{{ weekStats.agentsOnDuty }}</p>
+          <p class="font-display text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.agentsOnDuty }}</p>
         </div>
         <div class="ds-card text-center">
           <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Services auj.</p>
@@ -37,24 +37,24 @@
         </div>
         <div class="ds-card text-center">
           <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Heures sem.</p>
-          <p class="font-display text-4xl font-light" style="color: #D4AF37;">{{ weekStats.weekHours }}</p>
+          <p class="font-display text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.weekHours }}</p>
         </div>
         <div class="ds-card text-center">
           <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Masse sal. sem.</p>
-          <p class="font-display text-4xl font-light" style="color: #D4AF37;">{{ weekStats.weekPayroll }}$</p>
+          <p class="font-display text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.weekPayroll }}$</p>
         </div>
       </div>
 
       <!-- ── My own service panel ────────────────────────────── -->
       <div class="fade-up delay-100 ds-card" :class="activeService ? 'gold-glow' : ''">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-px h-5" style="background: #D4AF37;"></div>
+          <div class="w-px h-5" style="background: #B8C4D0;"></div>
           <h2 class="font-display text-xl font-light" style="color: #F5F5F0;">Mon service</h2>
           <div class="flex-1"></div>
           <button @click="showChangePwd = true"
                   class="text-xs font-body tracking-[0.1em] uppercase transition-colors duration-200"
                   style="color: #444;"
-                  onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#444'">
+                  onmouseover="this.style.color='#B8C4D0'" onmouseout="this.style.color='#444'">
             Changer mon mot de passe
           </button>
         </div>
@@ -63,7 +63,7 @@
             <div v-if="activeService">
               <span class="badge-active mb-2 inline-flex">En service</span>
               <p class="font-display text-2xl font-light mt-2" style="color: #F5F5F0;">{{ activeService.mission_label }}</p>
-              <p class="font-display text-3xl tabular-nums mt-1" style="color: #D4AF37;">{{ liveElapsed }}</p>
+              <p class="font-display text-3xl tabular-nums mt-1" style="color: #B8C4D0;">{{ liveElapsed }}</p>
             </div>
             <div v-else class="flex items-center gap-3">
               <input v-model="missionLabel" type="text" class="ds-input"
@@ -76,7 +76,7 @@
             </button>
             <button v-else @click="handleEndService" :disabled="actionLoading"
                     class="font-body font-semibold tracking-widest uppercase text-sm px-6 py-3 rounded-sm transition-all duration-200"
-                    style="background: transparent; border: 1px solid rgba(212,175,55,0.4); color: #D4AF37;">
+                    style="background: transparent; border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;">
               ⏹ Fin de service
             </button>
           </div>
@@ -90,7 +90,7 @@
           <div class="flex items-center gap-4 mb-4">
             <h2 class="font-display text-2xl font-light" style="color: #F5F5F0;">
               Services actifs
-              <span class="text-base ml-2 font-body" style="color: #D4AF37;">({{ liveServices.length }})</span>
+              <span class="text-base ml-2 font-body" style="color: #B8C4D0;">({{ liveServices.length }})</span>
             </h2>
             <div class="flex-1 h-px" style="background: #1a1a1a;"></div>
           </div>
@@ -119,7 +119,7 @@
             </select>
           </div>
           <div v-if="servicesStore.loading" class="text-center py-8">
-            <div class="w-8 h-8 border-2 border-gold-dark border-t-gold rounded-full animate-spin mx-auto"></div>
+            <div class="w-8 h-8 border-2 border-silver-dark border-t-silver rounded-full animate-spin mx-auto"></div>
           </div>
           <div v-else class="space-y-3">
             <ServiceCard v-for="s in filteredServices" :key="s.id" :service="s" :showAgent="true" />
@@ -147,7 +147,7 @@
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div v-for="p in allProfiles" :key="p.id" class="ds-card transition-all duration-200"
                :style="[
-                 isOnDuty(p.id) ? 'border-color: rgba(212,175,55,0.35);' : '',
+                 isOnDuty(p.id) ? 'border-color: rgba(184,196,208,0.35);' : '',
                  !p.is_active ? 'opacity: 0.45;' : ''
                ].join('')">
             <div class="flex items-start justify-between mb-3">
@@ -170,7 +170,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-xs font-body" style="color: #555;">Taux horaire</p>
-                <p class="font-display text-lg" style="color: #D4AF37;">{{ p.hourly_rate }}$/h</p>
+                <p class="font-display text-lg" style="color: #B8C4D0;">{{ p.hourly_rate }}$/h</p>
               </div>
               <button @click="openRateEditor(p)" class="btn-ghost text-xs px-3 py-1">Modifier</button>
             </div>
@@ -208,7 +208,7 @@
         <!-- Feedback -->
         <div v-if="createMsg" class="mb-6 p-4 rounded fade-up"
              :style="createMsg.type === 'success'
-               ? 'background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.25); color: #D4AF37;'
+               ? 'background: rgba(184,196,208,0.08); border: 1px solid rgba(184,196,208,0.25); color: #B8C4D0;'
                : 'background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: #f87171;'">
           <p class="font-body text-sm">{{ createMsg.text }}</p>
         </div>
@@ -230,7 +230,7 @@
               </label>
               <input v-model="newUser.username" type="text" placeholder="jean.dupont" class="ds-input" />
               <p class="text-xs mt-1 font-body" style="color: #444;">
-                Se connectera avec : <span style="color: #D4AF37;">{{ newUser.username || '…' }}</span>
+                Se connectera avec : <span style="color: #B8C4D0;">{{ newUser.username || '…' }}</span>
               </p>
             </div>
             <div>
@@ -298,7 +298,7 @@
                 <div class="flex items-center gap-4">
                   <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
                        :style="p.role === 'patron'
-                         ? 'background: rgba(212,175,55,0.15); color: #D4AF37;'
+                         ? 'background: rgba(184,196,208,0.15); color: #B8C4D0;'
                          : 'background: rgba(255,255,255,0.05); color: #888;'">
                     {{ p.full_name.charAt(0).toUpperCase() }}
                   </div>
@@ -310,7 +310,7 @@
                         Désactivé
                       </span>
                       <span v-if="p.id === profile?.id" class="text-xs font-body px-2 py-0.5 rounded"
-                            style="background: rgba(212,175,55,0.08); color: #D4AF37; border: 1px solid rgba(212,175,55,0.2);">
+                            style="background: rgba(184,196,208,0.08); color: #B8C4D0; border: 1px solid rgba(184,196,208,0.2);">
                         Vous
                       </span>
                     </div>
@@ -328,7 +328,7 @@
                   <button @click="openResetPwd(p)"
                           class="text-xs font-body tracking-[0.08em] uppercase px-3 py-1.5 rounded-sm transition-all duration-200"
                           style="background: transparent; border: 1px solid #242424; color: #666;"
-                          onmouseover="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.color='#D4AF37'"
+                          onmouseover="this.style.borderColor='rgba(184,196,208,0.4)'; this.style.color='#B8C4D0'"
                           onmouseout="this.style.borderColor='#242424'; this.style.color='#666'">
                     🔑 Réinitialiser MDP
                   </button>
@@ -338,7 +338,7 @@
                           class="text-xs font-body tracking-[0.08em] uppercase px-3 py-1.5 rounded-sm transition-all duration-200"
                           :style="p.is_active
                             ? 'background: transparent; border: 1px solid #242424; color: #666;'
-                            : 'background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.3); color: #D4AF37;'">
+                            : 'background: rgba(184,196,208,0.08); border: 1px solid rgba(184,196,208,0.3); color: #B8C4D0;'">
                     {{ p.is_active ? '⏸ Désactiver' : '▶ Réactiver' }}
                   </button>
 

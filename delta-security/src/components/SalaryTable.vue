@@ -6,7 +6,7 @@
       <div class="flex-1 h-px" style="background: #1a1a1a;"></div>
       <div class="flex items-center gap-3 flex-wrap">
         <button @click="prevWeek" class="btn-ghost px-3 py-1 text-lg">‹</button>
-        <span class="font-body text-sm tabular-nums" style="color: #D4AF37; min-width: 210px; text-align: center;">
+        <span class="font-body text-sm tabular-nums" style="color: #B8C4D0; min-width: 210px; text-align: center;">
           {{ weekLabel }}
         </span>
         <button @click="nextWeek" :disabled="isCurrentWeek" class="btn-ghost px-3 py-1 text-lg"
@@ -25,11 +25,11 @@
       </div>
       <div class="ds-card text-center">
         <p class="text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #555;">Total heures</p>
-        <p class="font-display text-3xl font-light" style="color: #D4AF37;">{{ totalHoursFormatted }}</p>
+        <p class="font-display text-3xl font-light" style="color: #B8C4D0;">{{ totalHoursFormatted }}</p>
       </div>
       <div class="ds-card text-center">
         <p class="text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #555;">Masse salariale</p>
-        <p class="font-display text-3xl font-light" style="color: #D4AF37;">{{ totalPayroll }}$</p>
+        <p class="font-display text-3xl font-light" style="color: #B8C4D0;">{{ totalPayroll }}$</p>
       </div>
     </div>
 
@@ -45,7 +45,7 @@
               <th class="text-right px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #555;">Minutes</th>
               <th class="text-right px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #555;">Tranches ×10</th>
               <th class="text-right px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #555;">Taux/h</th>
-              <th class="text-right px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #D4AF37;">Salaire sem.</th>
+              <th class="text-right px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #B8C4D0;">Salaire sem.</th>
             </tr>
           </thead>
           <tbody>
@@ -73,7 +73,7 @@
               </td>
               <td class="px-5 py-4 text-right">
                 <span class="font-display text-lg font-light"
-                      :style="emp.weekly_salary > 0 ? 'color: #D4AF37;' : 'color: #444;'">
+                      :style="emp.weekly_salary > 0 ? 'color: #B8C4D0;' : 'color: #444;'">
                   {{ emp.weekly_salary > 0 ? emp.weekly_salary + '$' : '—' }}
                 </span>
               </td>
@@ -91,7 +91,7 @@
               </td>
               <td></td>
               <td class="px-5 py-4 text-right">
-                <span class="font-display text-xl" style="color: #D4AF37;">{{ totalPayroll }}$</span>
+                <span class="font-display text-xl" style="color: #B8C4D0;">{{ totalPayroll }}$</span>
               </td>
             </tr>
           </tfoot>
@@ -100,11 +100,11 @@
     </div>
 
     <!-- Formula -->
-    <div class="mt-4 p-4 rounded" style="background: rgba(212,175,55,0.04); border: 1px solid rgba(212,175,55,0.12);">
+    <div class="mt-4 p-4 rounded" style="background: rgba(184,196,208,0.04); border: 1px solid rgba(184,196,208,0.12);">
       <p class="text-xs font-body" style="color: #666;">
-        <span style="color: #D4AF37;">Formule :</span>
+        <span style="color: #B8C4D0;">Formule :</span>
         Salaire = ⌊ Minutes ÷ 10 ⌋ × (Taux horaire ÷ 6)
-        &nbsp;·&nbsp; Exemple : 90min à 15$/h → 9 × 2.50$ = <strong style="color: #D4AF37;">22.50$</strong>
+        &nbsp;·&nbsp; Exemple : 90min à 15$/h → 9 × 2.50$ = <strong style="color: #B8C4D0;">22.50$</strong>
       </p>
     </div>
   </div>

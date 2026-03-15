@@ -7,20 +7,20 @@
       <!-- ── Header ──────────────────────────────────────────── -->
       <div class="fade-up flex items-end justify-between flex-wrap gap-4">
         <div>
-          <p class="text-xs tracking-[0.3em] uppercase mb-2 font-body" style="color: #D4AF37;">
+          <p class="text-xs tracking-[0.3em] uppercase mb-2 font-body" style="color: #B8C4D0;">
             — Tableau de bord
           </p>
           <h1 class="font-display text-5xl font-light" style="color: #F5F5F0;">
             {{ greeting }},<br />
-            <span style="color: #D4AF37;">{{ profile?.full_name?.split(' ')[0] }}</span>
+            <span style="color: #B8C4D0;">{{ profile?.full_name?.split(' ')[0] }}</span>
           </h1>
         </div>
         <div class="text-right hidden sm:flex flex-col items-end gap-2">
-          <p class="font-display text-2xl" style="color: #D4AF37;">{{ weekLabel }}</p>
+          <p class="font-display text-2xl" style="color: #B8C4D0;">{{ weekLabel }}</p>
           <button @click="showChangePwd = true"
                   class="text-xs font-body tracking-[0.1em] uppercase transition-colors duration-200"
                   style="color: #444;"
-                  onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#444'">
+                  onmouseover="this.style.color='#B8C4D0'" onmouseout="this.style.color='#444'">
             🔑 Changer mon mot de passe
           </button>
         </div>
@@ -34,7 +34,7 @@
         </div>
         <div class="ds-card text-center">
           <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Heures ce mois</p>
-          <p class="font-display text-4xl font-light" style="color: #D4AF37;">{{ monthlyHours }}</p>
+          <p class="font-display text-4xl font-light" style="color: #B8C4D0;">{{ monthlyHours }}</p>
         </div>
         <div class="ds-card text-center">
           <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Services sem.</p>
@@ -42,14 +42,14 @@
         </div>
         <div class="ds-card text-center">
           <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Heures sem.</p>
-          <p class="font-display text-4xl font-light" style="color: #D4AF37;">{{ weekStats.weekHours }}</p>
+          <p class="font-display text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.weekHours }}</p>
         </div>
       </div>
 
       <!-- ── Salaire estimé de la semaine ───────────────────── -->
       <div v-if="weekStats.estimatedSalary > 0"
            class="fade-up delay-200 ds-card flex items-center justify-between"
-           style="border-color: rgba(212,175,55,0.2);">
+           style="border-color: rgba(184,196,208,0.2);">
         <div>
           <p class="text-xs tracking-[0.2em] uppercase mb-1 font-body" style="color: #555;">
             Salaire estimé — semaine en cours
@@ -59,7 +59,7 @@
             × {{ (profile?.hourly_rate / 6).toFixed(2) }}$
           </p>
         </div>
-        <p class="font-display text-4xl font-light" style="color: #D4AF37;">
+        <p class="font-display text-4xl font-light" style="color: #B8C4D0;">
           {{ weekStats.estimatedSalary }}$
         </p>
       </div>
@@ -70,7 +70,7 @@
            style="position: relative; overflow: hidden;">
 
         <div v-if="activeService" class="absolute top-0 left-0 right-0 h-px"
-             style="background: linear-gradient(90deg, transparent, #D4AF37, transparent);"></div>
+             style="background: linear-gradient(90deg, transparent, #B8C4D0, transparent);"></div>
 
         <div class="flex flex-col sm:flex-row sm:items-center gap-6">
           <div class="flex-1">
@@ -84,9 +84,9 @@
                 {{ activeService.mission_label }}
               </p>
               <p class="text-sm font-body" style="color: #888;">
-                Démarré à <span style="color: #D4AF37;" class="tabular-nums">{{ formatTime(activeService.start_time) }}</span>
+                Démarré à <span style="color: #B8C4D0;" class="tabular-nums">{{ formatTime(activeService.start_time) }}</span>
               </p>
-              <p class="font-display text-4xl mt-3 tabular-nums" style="color: #D4AF37;">
+              <p class="font-display text-4xl mt-3 tabular-nums" style="color: #B8C4D0;">
                 {{ liveElapsed }}
               </p>
             </div>
@@ -109,7 +109,7 @@
             <button v-else
                     @click="handleEndService" :disabled="actionLoading"
                     class="w-full sm:w-auto font-body font-semibold tracking-widest uppercase text-sm px-8 py-4 rounded-sm transition-all duration-200"
-                    style="min-width: 180px; background: transparent; border: 1px solid rgba(212,175,55,0.4); color: #D4AF37;">
+                    style="min-width: 180px; background: transparent; border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;">
               <span v-if="actionLoading">...</span>
               <span v-else>⏹ Fin de service</span>
             </button>
@@ -119,7 +119,7 @@
         <transition name="slide-up">
           <div v-if="toast" class="mt-4 p-3 rounded text-sm font-body"
                :style="toast.type === 'success'
-                 ? 'background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.25); color: #D4AF37;'
+                 ? 'background: rgba(184,196,208,0.08); border: 1px solid rgba(184,196,208,0.25); color: #B8C4D0;'
                  : 'background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: #f87171;'">
             {{ toast.message }}
           </div>
@@ -137,7 +137,7 @@
         </div>
 
         <div v-if="servicesStore.loading" class="text-center py-12">
-          <div class="w-8 h-8 border-2 border-gold-dark border-t-gold rounded-full animate-spin mx-auto"></div>
+          <div class="w-8 h-8 border-2 border-silver-dark border-t-silver rounded-full animate-spin mx-auto"></div>
         </div>
 
         <div v-else-if="myServices.length === 0" class="ds-card text-center py-12">

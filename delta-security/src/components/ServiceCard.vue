@@ -1,6 +1,6 @@
 <template>
   <div class="ds-card transition-all duration-200 hover:border-opacity-60"
-       :style="service.is_active ? 'border-color: rgba(212,175,55,0.35);' : ''">
+       :style="service.is_active ? 'border-color: rgba(184,196,208,0.35);' : ''">
     <div class="flex items-start justify-between gap-4">
 
       <!-- Left info -->
@@ -8,7 +8,7 @@
         <div class="flex items-center gap-3 mb-2 flex-wrap">
           <span v-if="service.is_active" class="badge-active">En service</span>
           <span v-else class="badge-ended">Terminé</span>
-          <span v-if="showAgent && service.profiles" class="text-xs font-body tracking-wide" style="color: #D4AF37;">
+          <span v-if="showAgent && service.profiles" class="text-xs font-body tracking-wide" style="color: #B8C4D0;">
             {{ service.profiles.full_name }}
             <span v-if="service.profiles.badge_number" style="color: #666;"> · #{{ service.profiles.badge_number }}</span>
           </span>
@@ -33,13 +33,13 @@
           </div>
           <div v-if="service.duration_minutes">
             <p class="text-xs tracking-[0.12em] uppercase mb-0.5 font-body" style="color: #555;">Durée</p>
-            <p class="text-sm font-body tabular-nums" style="color: #D4AF37;">
+            <p class="text-sm font-body tabular-nums" style="color: #B8C4D0;">
               {{ formatDuration(service.duration_minutes) }}
             </p>
           </div>
           <div v-if="service.is_active">
             <p class="text-xs tracking-[0.12em] uppercase mb-0.5 font-body" style="color: #555;">Écoulé</p>
-            <p class="text-sm font-body tabular-nums" style="color: #D4AF37;">
+            <p class="text-sm font-body tabular-nums" style="color: #B8C4D0;">
               {{ elapsed }}
             </p>
           </div>

@@ -4,9 +4,9 @@
 
       <!-- Logo -->
       <div class="flex items-center gap-4">
-        <div class="w-px h-6 opacity-40" style="background: #D4AF37;"></div>
+        <div class="w-px h-6 opacity-40" style="background: #B8C4D0;"></div>
         <span class="font-display text-xl font-light tracking-wide" style="color: #F5F5F0;">
-          Delta <span style="color: #D4AF37;">Security</span>
+          Delta <span style="color: #B8C4D0;">Security</span>
         </span>
       </div>
 
@@ -14,7 +14,7 @@
       <div class="hidden sm:flex items-center gap-2">
         <span class="text-xs tracking-[0.2em] uppercase font-body px-3 py-1 rounded"
               :style="isPatron
-                ? 'background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3); color: #D4AF37;'
+                ? 'background: rgba(184,196,208,0.1); border: 1px solid rgba(184,196,208,0.3); color: #B8C4D0;'
                 : 'background: rgba(255,255,255,0.04); border: 1px solid #242424; color: #888;'">
           {{ isPatron ? '⬡ Patron' : '◈ Agent' }}
         </span>

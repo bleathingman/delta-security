@@ -15,7 +15,7 @@
       <!-- Feedback -->
       <div v-if="msg" class="mb-4 p-3 rounded text-sm font-body"
            :style="msg.type === 'success'
-             ? 'background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.25); color: #D4AF37;'
+             ? 'background: rgba(184,196,208,0.08); border: 1px solid rgba(184,196,208,0.25); color: #B8C4D0;'
              : 'background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: #f87171;'">
         {{ msg.text }}
       </div>
@@ -103,7 +103,7 @@ const strength = computed(() => {
   const levels = [
     { score: 1, label: 'Faible', color: '#ef4444' },
     { score: 2, label: 'Moyen', color: '#f59e0b' },
-    { score: 3, label: 'Fort', color: '#D4AF37' },
+    { score: 3, label: 'Fort', color: '#B8C4D0' },
     { score: 4, label: 'Très fort', color: '#22c55e' }
   ]
   return { score, ...levels[score - 1] || { label: 'Faible', color: '#ef4444' } }

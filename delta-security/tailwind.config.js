@@ -5,10 +5,10 @@ export default {
     extend: {
       colors: {
         gold: {
-          DEFAULT: '#D4AF37',
-          light: '#F0D060',
-          dark: '#B8960C',
-          muted: '#8A6E20',
+          DEFAULT: '#B8C4D0',
+          light: '#DCE3EC',
+          dark: '#8A97A8',
+          muted: '#6B7A8A',
         },
         obsidian: {
           DEFAULT: '#080808',
@@ -22,12 +22,12 @@ export default {
         body: ['"Outfit"', 'sans-serif'],
       },
       backgroundImage: {
-        'gold-shimmer': 'linear-gradient(105deg, #B8960C 0%, #D4AF37 40%, #F0D060 50%, #D4AF37 60%, #B8960C 100%)',
+        'gold-shimmer': 'linear-gradient(105deg, #8A97A8 0%, #B8C4D0 40%, #DCE3EC 50%, #B8C4D0 60%, #8A97A8 100%)',
       },
       animation: {
         'shimmer': 'shimmer 3s infinite linear',
         'fade-up': 'fadeUp 0.6s ease forwards',
-        'pulse-gold': 'pulseGold 2s ease-in-out infinite',
+        'pulse-silver': 'pulseGold 2s ease-in-out infinite',
       },
       keyframes: {
         shimmer: {
@@ -39,8 +39,8 @@ export default {
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         pulseGold: {
-          '0%, 100%': { boxShadow: '0 0 0 0 rgba(212,175,55,0.4)' },
-          '50%': { boxShadow: '0 0 0 12px rgba(212,175,55,0)' },
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(184,196,208,0.4)' },
+          '50%': { boxShadow: '0 0 0 12px rgba(184,196,208,0)' },
         }
       }
     },
