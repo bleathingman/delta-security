@@ -87,14 +87,14 @@
     <div class="p-4 rounded" style="background: rgba(184,196,208,0.04); border: 1px solid rgba(184,196,208,0.12);">
       <p class="text-xs font-body mb-2" style="color: #555;">
         <span style="color: #B8C4D0;">Formule de calcul</span>
-        <span class="ml-3">Salaire = ⌊ Minutes ÷ 10 ⌋ × (Taux horaire ÷ 6)</span>
+        <span class="ml-3">Salaire = Minutes travaillées × (Taux horaire ÷ 60)</span>
       </p>
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-3">
         <div v-for="grade in grades.filter(g => g.hourly_rate > 0)" :key="grade.id"
              class="text-xs font-body p-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid #1a1a1a;">
           <span style="color: #888;">{{ grade.label }} :</span>
           <span class="ml-1 tabular-nums" style="color: #B8C4D0;">
-            {{ (grade.hourly_rate / 6).toFixed(2) }}$ / tranche
+            {{ (grade.hourly_rate / 60).toFixed(4) }}$ / min
           </span>
         </div>
       </div>

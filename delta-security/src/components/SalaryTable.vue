@@ -43,7 +43,6 @@
               <th class="text-left px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #555;">Badge</th>
               <th class="text-right px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #555;">Services</th>
               <th class="text-right px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #555;">Minutes</th>
-              <th class="text-right px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #555;">Tranches ×10</th>
               <th class="text-right px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #555;">Taux/h</th>
               <th class="text-right px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #B8C4D0;">Salaire sem.</th>
             </tr>
@@ -66,15 +65,12 @@
                 <span class="font-body text-sm tabular-nums" style="color: #888;">{{ emp.total_minutes }}min</span>
               </td>
               <td class="px-5 py-4 text-right">
-                <span class="font-body text-sm tabular-nums font-medium" style="color: #F5F5F0;">× {{ emp.intervals_of_10 }}</span>
-              </td>
-              <td class="px-5 py-4 text-right">
                 <span class="font-body text-sm tabular-nums" style="color: #666;">{{ emp.hourly_rate }}$/h</span>
               </td>
               <td class="px-5 py-4 text-right">
                 <span class="font-display text-lg font-light"
                       :style="emp.weekly_salary > 0 ? 'color: #B8C4D0;' : 'color: #444;'">
-                  {{ emp.weekly_salary > 0 ? emp.weekly_salary + '$' : '—' }}
+                  {{ emp.weekly_salary > 0 ? emp.weekly_salary.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '$' : '—' }}
                 </span>
               </td>
             </tr>
@@ -86,12 +82,12 @@
           </tbody>
           <tfoot v-if="salaries.length > 0">
             <tr style="border-top: 1px solid #1a1a1a;">
-              <td colspan="5" class="px-5 py-4">
+              <td colspan="4" class="px-5 py-4">
                 <span class="text-xs tracking-[0.15em] uppercase font-body" style="color: #555;">Total à payer</span>
               </td>
               <td></td>
               <td class="px-5 py-4 text-right">
-                <span class="font-display text-xl" style="color: #B8C4D0;">{{ totalPayroll }}$</span>
+                <span class="font-display text-xl" style="color: #B8C4D0;">{{ Number(totalPayroll).toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}$</span>
               </td>
             </tr>
           </tfoot>
@@ -103,8 +99,8 @@
     <div class="mt-4 p-4 rounded" style="background: rgba(184,196,208,0.04); border: 1px solid rgba(184,196,208,0.12);">
       <p class="text-xs font-body" style="color: #666;">
         <span style="color: #B8C4D0;">Formule :</span>
-        Salaire = ⌊ Minutes ÷ 10 ⌋ × (Taux horaire ÷ 6)
-        &nbsp;·&nbsp; Exemple : 90min à 15$/h → 9 × 2.50$ = <strong style="color: #B8C4D0;">22.50$</strong>
+        Salaire = Minutes × (Taux horaire ÷ 60)
+        &nbsp;·&nbsp; Exemple : 77min à 1000$/h → 77 × 16.67$ = <strong style="color: #B8C4D0;">1 283.33$</strong>
       </p>
     </div>
   </div>

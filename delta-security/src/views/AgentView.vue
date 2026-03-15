@@ -58,12 +58,12 @@
             Salaire estimé — semaine en cours
           </p>
           <p class="font-body text-xs" style="color: #444;">
-            {{ weekStats.weekMinutes }} min ÷ 10 = {{ Math.floor(weekStats.weekMinutes / 10) }} tranches
-            × {{ (profile?.hourly_rate / 6).toFixed(2) }}$
+            {{ weekStats.weekMinutes }} min × ({{ profile?.hourly_rate }}$ ÷ 60)
+            = {{ (profile?.hourly_rate / 60).toFixed(4) }}$ / min
           </p>
         </div>
         <p class="font-display text-4xl font-light" style="color: #B8C4D0;">
-          {{ weekStats.estimatedSalary }}$
+          {{ weekStats.estimatedSalary.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}$
         </p>
       </div>
 

@@ -143,8 +143,7 @@ export const useServicesStore = defineStore('services', () => {
 
     return Object.values(map).map(p => ({
       ...p,
-      intervals_of_10: Math.floor(p.total_minutes / 10),
-      weekly_salary: +(Math.floor(p.total_minutes / 10) * (p.hourly_rate / 6)).toFixed(2)
+      weekly_salary: +(p.total_minutes * (p.hourly_rate / 60)).toFixed(2)
     }))
   }
 
@@ -168,7 +167,7 @@ export const useServicesStore = defineStore('services', () => {
     const weekPayroll = allProfiles.value.reduce((total, p) => {
       const mins = weekServices.filter(s => s.user_id === p.id)
         .reduce((a, s) => a + (s.duration_minutes || 0), 0)
-      return total + Math.floor(mins / 10) * (p.hourly_rate / 6)
+      return total + mins * (p.hourly_rate / 60)
     }, 0)
 
     const todayServices = allServices.value.filter(s =>
@@ -202,7 +201,7 @@ export const useServicesStore = defineStore('services', () => {
       weekServices: weekServices.length,
       weekMinutes,
       weekHours: `${Math.floor(weekMinutes / 60)}h${String(weekMinutes % 60).padStart(2,'0')}`,
-      estimatedSalary: +(Math.floor(weekMinutes / 10) * ((hourlyRate ?? 15) / 6)).toFixed(2)
+      estimatedSalary: +(weekMinutes * ((hourlyRate ?? 15) / 60)).toFixed(2)
     }
   }
 
@@ -211,14 +210,13 @@ export const useServicesStore = defineStore('services', () => {
     const salaries = computeWeeklySalaries(weekStart)
     const label    = dayjs(weekStart).startOf('isoWeek').format('YYYY-MM-DD')
 
-    const header = ['Nom', 'Grade', 'Badge', 'Services', 'Minutes', 'Tranches 10min', 'Taux $/h', 'Salaire $']
+    const header = ['Nom', 'Grade', 'Badge', 'Services', 'Minutes totales', 'Taux $/h', 'Salaire $']
     const rows   = salaries.map(e => [
       e.full_name,
       e.grades?.label || e.role,
       e.badge_number || '',
       e.total_services,
       e.total_minutes,
-      e.intervals_of_10,
       e.hourly_rate,
       e.weekly_salary
     ])
