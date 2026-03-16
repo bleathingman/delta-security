@@ -98,7 +98,7 @@
             <p class="font-display text-lg font-light" style="color: #444;">Aucun service en cours</p>
           </div>
           <div v-else class="grid sm:grid-cols-2 gap-3">
-            <ServiceCard v-for="s in liveServices" :key="s.id" :service="s" :showAgent="true" />
+            <ServiceCard v-for="s in liveServices" :key="s.id" :service="s" :showAgent="true" :canDelete="true" @deleted="onServiceDeleted" />
           </div>
         </div>
 
@@ -122,7 +122,7 @@
             <div class="w-8 h-8 border-2 border-silver-dark border-t-silver rounded-full animate-spin mx-auto"></div>
           </div>
           <div v-else class="space-y-3">
-            <ServiceCard v-for="s in filteredServices" :key="s.id" :service="s" :showAgent="true" />
+            <ServiceCard v-for="s in filteredServices" :key="s.id" :service="s" :showAgent="true" :canDelete="true" @deleted="onServiceDeleted" />
             <div v-if="filteredServices.length === 0" class="ds-card text-center py-8">
               <p class="font-body text-sm" style="color: #555;">Aucun résultat</p>
             </div>
@@ -537,6 +537,11 @@ async function handleEndService() {
 }
 
 async function loadAll() { await servicesStore.fetchAllServices() }
+
+function onServiceDeleted(serviceId) {
+  const idx = servicesStore.allServices.findIndex(s => s.id === serviceId)
+  if (idx !== -1) servicesStore.allServices.splice(idx, 1)
+}
 
 // ── Edit hourly rate ───────────────────────────────────────
 function openRateEditor(p) { editingProfile.value = p; newRate.value = p.hourly_rate }

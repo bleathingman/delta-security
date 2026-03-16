@@ -46,14 +46,41 @@
         </div>
       </div>
 
-      <!-- Date column -->
-      <div class="text-right shrink-0">
+      <!-- Right column -->
+      <div class="text-right shrink-0 flex flex-col items-end gap-2">
         <p class="text-xs font-body tabular-nums" style="color: #555;">
           {{ formatDate(service.start_time) }}
         </p>
+
+        <!-- Delete button — patron only -->
+        <button v-if="canDelete"
+                @click="confirmDelete = true"
+                class="text-xs font-body tracking-[0.08em] uppercase px-2 py-1 rounded-sm transition-all duration-200"
+                style="background: transparent; border: 1px solid rgba(239,68,68,0.2); color: #ef444460;"
+                onmouseover="this.style.background='rgba(239,68,68,0.08)'; this.style.color='#ef4444'"
+                onmouseout="this.style.background='transparent'; this.style.color='#ef444460'">
+          ✕ Supprimer
+        </button>
       </div>
 
     </div>
+
+    <!-- Confirm delete inline -->
+    <div v-if="confirmDelete" class="mt-4 pt-4 flex items-center justify-between flex-wrap gap-3"
+         style="border-top: 1px solid rgba(239,68,68,0.2);">
+      <p class="text-xs font-body" style="color: #ef4444;">
+        Supprimer cette prise de service ? Cette action est irréversible.
+      </p>
+      <div class="flex gap-2">
+        <button @click="handleDelete" :disabled="deleting"
+                class="text-xs font-body tracking-[0.08em] uppercase px-3 py-1.5 rounded-sm transition-all duration-200"
+                style="background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.4); color: #ef4444;">
+          {{ deleting ? '...' : 'Confirmer' }}
+        </button>
+        <button @click="confirmDelete = false" class="btn-ghost text-xs px-3 py-1.5">Annuler</button>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -61,23 +88,24 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import dayjs from 'dayjs'
 import 'dayjs/locale/fr'
+import { supabase } from '@/lib/supabase'
 dayjs.locale('fr')
 
 const props = defineProps({
-  service: { type: Object, required: true },
-  showAgent: { type: Boolean, default: false }
+  service:   { type: Object,  required: true },
+  showAgent: { type: Boolean, default: false },
+  canDelete: { type: Boolean, default: false }
 })
 
-const elapsed = ref('')
+const emit = defineEmits(['deleted'])
+
+const elapsed       = ref('')
+const confirmDelete = ref(false)
+const deleting      = ref(false)
 let timer = null
 
-function formatTime(iso) {
-  return dayjs(iso).format('HH:mm:ss')
-}
-
-function formatDate(iso) {
-  return dayjs(iso).format('DD MMM YYYY')
-}
+function formatTime(iso) { return dayjs(iso).format('HH:mm:ss') }
+function formatDate(iso) { return dayjs(iso).format('DD MMM YYYY') }
 
 function formatDuration(minutes) {
   if (!minutes) return '—'
@@ -93,6 +121,18 @@ function computeElapsed() {
   const m = Math.floor((diff % 3600) / 60)
   const s = diff % 60
   elapsed.value = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+}
+
+async function handleDelete() {
+  deleting.value = true
+  const { error } = await supabase
+    .from('services')
+    .delete()
+    .eq('id', props.service.id)
+  deleting.value = false
+  if (!error) {
+    emit('deleted', props.service.id)
+  }
 }
 
 onMounted(() => {
