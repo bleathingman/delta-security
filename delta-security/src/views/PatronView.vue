@@ -2,20 +2,20 @@
   <div class="min-h-screen" style="background: #080808;">
     <NavBar />
 
-    <div class="max-w-7xl mx-auto px-6 py-10 space-y-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-6 sm:space-y-10">
 
       <!-- ── Header ──────────────────────────────────────────── -->
-      <div class="fade-up flex items-end justify-between flex-wrap gap-4">
+      <div class="fade-up flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
           <p class="text-xs tracking-[0.3em] uppercase mb-2 font-body" style="color: #B8C4D0;">— Direction</p>
-          <h1 class="font-display text-5xl font-light" style="color: #F5F5F0;">
+          <h1 class="font-display text-4xl sm:text-5xl font-light" style="color: #F5F5F0;">
             Vue <span style="color: #B8C4D0;">Patron</span>
           </h1>
         </div>
-        <div class="flex items-center gap-2 flex-wrap">
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide" style="-webkit-overflow-scrolling: touch;">
           <button v-for="tab in tabs" :key="tab.id"
                   @click="activeTab = tab.id"
-                  class="font-body text-xs tracking-[0.15em] uppercase px-4 py-2 rounded-sm transition-all duration-200"
+                  class="font-body text-xs tracking-[0.15em] uppercase px-4 py-2 rounded-sm transition-all duration-200 shrink-0"
                   :style="activeTab === tab.id
                     ? 'background: rgba(184,196,208,0.12); border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;'
                     : 'background: transparent; border: 1px solid #242424; color: #666;'">
@@ -26,22 +26,22 @@
 
 
       <!-- ── Stats temps réel ────────────────────────────────── -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 fade-up delay-100">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 fade-up delay-100">
         <div class="ds-card text-center">
-          <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Agents actifs</p>
-          <p class="font-display text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.agentsOnDuty }}</p>
+          <p class="text-xs tracking-[0.1em] uppercase mb-1 sm:mb-2 font-body" style="color: #555;">Agents actifs</p>
+          <p class="font-display text-3xl sm:text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.agentsOnDuty }}</p>
         </div>
         <div class="ds-card text-center">
-          <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Services auj.</p>
-          <p class="font-display text-4xl font-light" style="color: #F5F5F0;">{{ weekStats.todayServices }}</p>
+          <p class="text-xs tracking-[0.1em] uppercase mb-1 sm:mb-2 font-body" style="color: #555;">Services auj.</p>
+          <p class="font-display text-3xl sm:text-4xl font-light" style="color: #F5F5F0;">{{ weekStats.todayServices }}</p>
         </div>
         <div class="ds-card text-center">
-          <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Heures sem.</p>
-          <p class="font-display text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.weekHours }}</p>
+          <p class="text-xs tracking-[0.1em] uppercase mb-1 sm:mb-2 font-body" style="color: #555;">Heures sem.</p>
+          <p class="font-display text-3xl sm:text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.weekHours }}</p>
         </div>
         <div class="ds-card text-center">
-          <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Masse sal. sem.</p>
-          <p class="font-display text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.weekPayroll }}$</p>
+          <p class="text-xs tracking-[0.1em] uppercase mb-1 sm:mb-2 font-body" style="color: #555;">Masse sal.</p>
+          <p class="font-display text-3xl sm:text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.weekPayroll }}$</p>
         </div>
       </div>
 
@@ -97,7 +97,7 @@
           <div v-if="liveServices.length === 0" class="ds-card text-center py-8">
             <p class="font-display text-lg font-light" style="color: #444;">Aucun service en cours</p>
           </div>
-          <div v-else class="grid sm:grid-cols-2 gap-3">
+          <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <ServiceCard v-for="s in liveServices" :key="s.id" :service="s" :showAgent="true" :canDelete="true" @deleted="onServiceDeleted" />
           </div>
         </div>
@@ -144,7 +144,7 @@
             {{ activeProfiles.length }} actifs · {{ allProfiles.length }} total
           </span>
         </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <div v-for="p in allProfiles" :key="p.id" class="ds-card transition-all duration-200"
                :style="[
                  isOnDuty(p.id) ? 'border-color: rgba(184,196,208,0.35);' : '',
@@ -218,7 +218,7 @@
           <p class="font-body text-sm">{{ createMsg.text }}</p>
         </div>
 
-        <div class="ds-card max-w-lg">
+        <div class="ds-card w-full max-w-lg">
           <p class="text-xs tracking-[0.15em] uppercase mb-6 font-body" style="color: #555;">
             — Informations du nouveau membre
           </p>
@@ -311,7 +311,7 @@
                     {{ p.full_name.charAt(0).toUpperCase() }}
                   </div>
                   <div>
-                    <div class="flex items-center gap-2 flex-wrap">
+                    <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide" style="-webkit-overflow-scrolling: touch;">
                       <p class="font-body text-sm font-medium" style="color: #F5F5F0;">{{ p.full_name }}</p>
                       <span v-if="!p.is_active" class="text-xs font-body px-2 py-0.5 rounded"
                             style="background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2);">

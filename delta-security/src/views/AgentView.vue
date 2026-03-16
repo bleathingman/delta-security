@@ -2,21 +2,21 @@
   <div class="min-h-screen" style="background: #080808;">
     <NavBar />
 
-    <div class="max-w-4xl mx-auto px-6 py-10 space-y-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-5 sm:space-y-8">
 
       <!-- ── Header ──────────────────────────────────────────── -->
-      <div class="fade-up flex items-end justify-between flex-wrap gap-4">
+      <div class="fade-up flex items-end justify-between flex-wrap gap-3">
         <div>
-          <p class="text-xs tracking-[0.3em] uppercase mb-2 font-body" style="color: #B8C4D0;">
+          <p class="text-xs tracking-[0.3em] uppercase mb-1 sm:mb-2 font-body" style="color: #B8C4D0;">
             — Tableau de bord
           </p>
-          <h1 class="font-display text-5xl font-light" style="color: #F5F5F0;">
+          <h1 class="font-display text-4xl sm:text-5xl font-light" style="color: #F5F5F0;">
             {{ greeting }},<br />
             <span style="color: #B8C4D0;">{{ profile?.full_name?.split(' ')[0] }}</span>
           </h1>
         </div>
-        <div class="text-right hidden sm:flex flex-col items-end gap-2">
-          <p class="font-display text-2xl" style="color: #B8C4D0;">{{ weekLabel }}</p>
+        <div class="flex flex-col items-end gap-1 sm:gap-2">
+          <p class="font-display text-xl sm:text-2xl" style="color: #B8C4D0;">{{ weekLabel }}</p>
           <p v-if="profile?.grades?.label" class="text-xs font-body tracking-[0.15em] uppercase" style="color: #555;">
             {{ profile.grades.label }}
           </p>
@@ -24,45 +24,44 @@
                   class="text-xs font-body tracking-[0.1em] uppercase transition-colors duration-200"
                   style="color: #444;"
                   onmouseover="this.style.color='#B8C4D0'" onmouseout="this.style.color='#444'">
-            🔑 Changer mon mot de passe
+            🔑 Changer mot de passe
           </button>
         </div>
       </div>
 
       <!-- ── Stats ───────────────────────────────────────────── -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 fade-up delay-100">
-        <div class="ds-card text-center">
-          <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Services ce mois</p>
-          <p class="font-display text-4xl font-light" style="color: #F5F5F0;">{{ monthlyServices }}</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 fade-up delay-100">
+        <div class="ds-card text-center py-3 sm:py-5">
+          <p class="text-xs tracking-[0.1em] uppercase mb-1 sm:mb-2 font-body" style="color: #555;">Services mois</p>
+          <p class="font-display text-3xl sm:text-4xl font-light" style="color: #F5F5F0;">{{ monthlyServices }}</p>
         </div>
-        <div class="ds-card text-center">
-          <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Heures ce mois</p>
-          <p class="font-display text-4xl font-light" style="color: #B8C4D0;">{{ monthlyHours }}</p>
+        <div class="ds-card text-center py-3 sm:py-5">
+          <p class="text-xs tracking-[0.1em] uppercase mb-1 sm:mb-2 font-body" style="color: #555;">Heures mois</p>
+          <p class="font-display text-3xl sm:text-4xl font-light" style="color: #B8C4D0;">{{ monthlyHours }}</p>
         </div>
-        <div class="ds-card text-center">
-          <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Services sem.</p>
-          <p class="font-display text-4xl font-light" style="color: #F5F5F0;">{{ weekStats.weekServices }}</p>
+        <div class="ds-card text-center py-3 sm:py-5">
+          <p class="text-xs tracking-[0.1em] uppercase mb-1 sm:mb-2 font-body" style="color: #555;">Services sem.</p>
+          <p class="font-display text-3xl sm:text-4xl font-light" style="color: #F5F5F0;">{{ weekStats.weekServices }}</p>
         </div>
-        <div class="ds-card text-center">
-          <p class="text-xs tracking-[0.15em] uppercase mb-2 font-body" style="color: #555;">Heures sem.</p>
-          <p class="font-display text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.weekHours }}</p>
+        <div class="ds-card text-center py-3 sm:py-5">
+          <p class="text-xs tracking-[0.1em] uppercase mb-1 sm:mb-2 font-body" style="color: #555;">Heures sem.</p>
+          <p class="font-display text-3xl sm:text-4xl font-light" style="color: #B8C4D0;">{{ weekStats.weekHours }}</p>
         </div>
       </div>
 
-      <!-- ── Salaire estimé de la semaine ───────────────────── -->
+      <!-- ── Salaire estimé ──────────────────────────────────── -->
       <div v-if="weekStats.estimatedSalary > 0"
-           class="fade-up delay-200 ds-card flex items-center justify-between"
+           class="fade-up delay-200 ds-card flex items-center justify-between gap-4"
            style="border-color: rgba(184,196,208,0.2);">
-        <div>
+        <div class="min-w-0">
           <p class="text-xs tracking-[0.2em] uppercase mb-1 font-body" style="color: #555;">
             Salaire estimé — semaine en cours
           </p>
-          <p class="font-body text-xs" style="color: #444;">
+          <p class="font-body text-xs truncate" style="color: #444;">
             {{ weekStats.weekMinutes }} min × ({{ profile?.hourly_rate }}$ ÷ 60)
-            = {{ (profile?.hourly_rate / 60).toFixed(4) }}$ / min
           </p>
         </div>
-        <p class="font-display text-4xl font-light" style="color: #B8C4D0;">
+        <p class="font-display text-3xl sm:text-4xl font-light shrink-0" style="color: #B8C4D0;">
           {{ weekStats.estimatedSalary.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}$
         </p>
       </div>
@@ -75,7 +74,7 @@
         <div v-if="activeService" class="absolute top-0 left-0 right-0 h-px"
              style="background: linear-gradient(90deg, transparent, #B8C4D0, transparent);"></div>
 
-        <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-5">
           <div class="flex-1">
             <div class="flex items-center gap-3 mb-3">
               <span v-if="activeService" class="badge-active">Service actif</span>
@@ -83,19 +82,19 @@
             </div>
 
             <div v-if="activeService">
-              <p class="font-display text-2xl font-light mb-1" style="color: #F5F5F0;">
+              <p class="font-display text-xl sm:text-2xl font-light mb-1" style="color: #F5F5F0;">
                 {{ activeService.mission_label }}
               </p>
               <p class="text-sm font-body" style="color: #888;">
                 Démarré à <span style="color: #B8C4D0;" class="tabular-nums">{{ formatTime(activeService.start_time) }}</span>
               </p>
-              <p class="font-display text-4xl mt-3 tabular-nums" style="color: #B8C4D0;">
+              <p class="font-display text-3xl sm:text-4xl mt-2 tabular-nums" style="color: #B8C4D0;">
                 {{ liveElapsed }}
               </p>
             </div>
 
             <div v-else>
-              <p class="font-display text-2xl font-light mb-3" style="color: #888;">Prêt pour la mission</p>
+              <p class="font-display text-xl sm:text-2xl font-light mb-3" style="color: #888;">Prêt pour la mission</p>
               <input v-model="missionLabel" type="text" class="ds-input"
                      placeholder="Label de mission (optionnel)" />
             </div>
@@ -104,15 +103,15 @@
           <div class="shrink-0">
             <button v-if="!activeService"
                     @click="handleStartService" :disabled="actionLoading"
-                    class="btn-gold w-full sm:w-auto" style="min-width: 180px; padding: 1rem 2rem;">
+                    class="btn-gold w-full sm:w-auto" style="min-width: 160px; padding: 0.875rem 1.5rem;">
               <span v-if="actionLoading">...</span>
               <span v-else>▶ Prise de service</span>
             </button>
 
             <button v-else
                     @click="handleEndService" :disabled="actionLoading"
-                    class="w-full sm:w-auto font-body font-semibold tracking-widest uppercase text-sm px-8 py-4 rounded-sm transition-all duration-200"
-                    style="min-width: 180px; background: transparent; border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;">
+                    class="w-full sm:w-auto font-body font-semibold tracking-widest uppercase text-sm px-6 sm:px-8 py-3 sm:py-4 rounded-sm transition-all duration-200"
+                    style="background: transparent; border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;">
               <span v-if="actionLoading">...</span>
               <span v-else>⏹ Fin de service</span>
             </button>
@@ -131,19 +130,19 @@
 
       <!-- ── Historique ──────────────────────────────────────── -->
       <div class="fade-up delay-300">
-        <div class="flex items-center gap-4 mb-5">
-          <h2 class="font-display text-2xl font-light" style="color: #F5F5F0;">Mes services</h2>
+        <div class="flex items-center gap-4 mb-4 sm:mb-5">
+          <h2 class="font-display text-xl sm:text-2xl font-light" style="color: #F5F5F0;">Mes services</h2>
           <div class="flex-1 h-px" style="background: #1a1a1a;"></div>
           <span class="text-xs tracking-[0.15em] uppercase font-body" style="color: #555;">
-            {{ myServices.length }} entrées
+            {{ myServices.length }}
           </span>
         </div>
 
         <div v-if="servicesStore.loading" class="text-center py-12">
-          <div class="w-8 h-8 border-2 border-silver-dark border-t-silver rounded-full animate-spin mx-auto"></div>
+          <div class="w-8 h-8 border-2 rounded-full animate-spin mx-auto" style="border-color: #242424; border-top-color: #B8C4D0;"></div>
         </div>
 
-        <div v-else-if="myServices.length === 0" class="ds-card text-center py-12">
+        <div v-else-if="myServices.length === 0" class="ds-card text-center py-10">
           <p class="font-display text-xl font-light mb-2" style="color: #444;">Aucun service enregistré</p>
           <p class="text-sm font-body" style="color: #555;">Votre premier service apparaîtra ici</p>
         </div>
@@ -161,13 +160,11 @@
 
     </div>
 
-    <!-- Change password modal -->
     <ChangePasswordModal v-if="showChangePwd"
       :profileName="profile?.full_name"
       @close="showChangePwd = false"
       @saved="showChangePwd = false"
     />
-
   </div>
 </template>
 
@@ -186,9 +183,9 @@ import ChangePasswordModal from '@/components/ChangePasswordModal.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useServicesStore } from '@/stores/services'
 
-const authStore      = useAuthStore()
-const servicesStore  = useServicesStore()
-const { profile }    = storeToRefs(authStore)
+const authStore     = useAuthStore()
+const servicesStore = useServicesStore()
+const { profile }   = storeToRefs(authStore)
 const { myServices, activeService } = storeToRefs(servicesStore)
 
 const missionLabel  = ref('')
@@ -199,7 +196,6 @@ const showChangePwd = ref(false)
 let elapsedTimer = null
 let toastTimer   = null
 
-// ── Greeting ───────────────────────────────────────────────
 const greeting = computed(() => {
   const h = new Date().getHours()
   if (h < 12) return 'Bonjour'
@@ -207,14 +203,12 @@ const greeting = computed(() => {
   return 'Bonsoir'
 })
 
-// ── Week label ─────────────────────────────────────────────
 const weekLabel = computed(() => {
   const s = dayjs().startOf('isoWeek').format('DD MMM')
   const e = dayjs().endOf('isoWeek').format('DD MMM')
   return `${s} — ${e}`
 })
 
-// ── Stats mensuelles ───────────────────────────────────────
 const monthlyServices = computed(() => {
   const start = dayjs().startOf('month')
   return myServices.value.filter(s => dayjs(s.start_time).isAfter(start) && s.end_time).length
@@ -228,15 +222,11 @@ const monthlyHours = computed(() => {
   return `${Math.floor(mins / 60)}h${String(mins % 60).padStart(2, '0')}`
 })
 
-// ── Stats semaine courante ─────────────────────────────────
 const weekStats = computed(() =>
   servicesStore.getMyWeekStats(profile.value?.id, profile.value?.hourly_rate ?? 15)
 )
 
-// ── Time helpers ───────────────────────────────────────────
-function formatTime(iso) {
-  return dayjs(iso).format('HH:mm:ss')
-}
+function formatTime(iso) { return dayjs(iso).format('HH:mm:ss') }
 
 function tickElapsed() {
   if (!activeService.value) return
@@ -253,7 +243,6 @@ function startElapsedTimer() {
   elapsedTimer = setInterval(tickElapsed, 1000)
 }
 
-// ── Service actions ────────────────────────────────────────
 async function handleStartService() {
   if (!profile.value) return
   actionLoading.value = true
@@ -262,11 +251,8 @@ async function handleStartService() {
     missionLabel.value = ''
     showToast('Prise de service enregistrée.', 'success')
     startElapsedTimer()
-  } catch (e) {
-    showToast(e.message, 'error')
-  } finally {
-    actionLoading.value = false
-  }
+  } catch (e) { showToast(e.message, 'error') }
+  finally { actionLoading.value = false }
 }
 
 async function handleEndService() {
@@ -277,11 +263,8 @@ async function handleEndService() {
     clearInterval(elapsedTimer)
     showToast('Fin de service enregistrée. Bonne récupération.', 'success')
     await servicesStore.fetchMyServices(profile.value.id)
-  } catch (e) {
-    showToast(e.message, 'error')
-  } finally {
-    actionLoading.value = false
-  }
+  } catch (e) { showToast(e.message, 'error') }
+  finally { actionLoading.value = false }
 }
 
 function showToast(message, type) {
@@ -290,7 +273,6 @@ function showToast(message, type) {
   toastTimer = setTimeout(() => { toast.value = null }, 4000)
 }
 
-// ── Lifecycle ──────────────────────────────────────────────
 onMounted(async () => {
   if (profile.value) {
     await servicesStore.fetchActiveService(profile.value.id)

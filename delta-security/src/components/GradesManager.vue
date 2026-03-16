@@ -17,9 +17,9 @@
       </p>
     </div>
 
-    <!-- Grades table -->
-    <div class="ds-card p-0 overflow-hidden mb-8">
-      <table class="w-full">
+    <!-- Desktop table -->
+    <div class="hidden sm:block ds-card p-0 overflow-hidden mb-8">
+      <div class="overflow-x-auto"><table class="w-full" style="min-width: 500px;">
         <thead>
           <tr style="border-bottom: 1px solid #1a1a1a;">
             <th class="text-left px-5 py-4 text-xs tracking-[0.15em] uppercase font-body font-medium" style="color: #555;">Grade</th>
@@ -80,7 +80,33 @@
             </td>
           </tr>
         </tbody>
-      </table>
+      </table></div>
+    </div>
+
+    <!-- Mobile grades cards -->
+    <div class="sm:hidden space-y-3 mb-6">
+      <div v-for="grade in grades" :key="grade.id" class="ds-card">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <p class="font-body font-medium text-sm" style="color: #F5F5F0;">{{ grade.label }}</p>
+            <p class="text-xs font-body mt-0.5" style="color: #555;">{{ grade.slug }} · {{ agentCountByGrade(grade.id) }} agents</p>
+          </div>
+          <div v-if="editingGrade?.id === grade.id" class="flex items-center gap-2">
+            <input v-model.number="editingRate" type="number" step="0.5" min="0"
+                   class="ds-input text-right" style="width: 80px; padding: 0.3rem 0.5rem; font-size: 0.875rem;"
+                   @keyup.enter="saveGradeRate" />
+            <button @click="saveGradeRate" :disabled="saving"
+                    class="text-xs font-body px-2 py-1 rounded-sm" style="background: rgba(184,196,208,0.12); border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;">
+              ✓
+            </button>
+            <button @click="editingGrade = null" class="btn-ghost text-xs px-2 py-1">✕</button>
+          </div>
+          <div v-else class="flex items-center gap-2">
+            <span class="font-display text-lg" style="color: #B8C4D0;">{{ grade.hourly_rate }}$</span>
+            <button @click="startEdit(grade)" class="btn-ghost text-xs px-2 py-1">✏️</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Formula reminder -->
