@@ -18,7 +18,7 @@
       <div class="fade-up">
         <div class="flex items-center gap-3 mb-2">
           <div class="w-8 h-px" style="background: #B8C4D0;"></div>
-          <span class="text-xs tracking-[0.3em] uppercase font-body" style="color: #B8C4D0;">Établi depuis 2018</span>
+          <span class="text-xs tracking-[0.3em] uppercase font-body" style="color: #B8C4D0;">Établi depuis 2024</span>
         </div>
         <h1 class="font-display text-7xl font-light leading-none mb-1" style="color: #F5F5F0;">Delta</h1>
         <h2 class="font-display text-7xl font-light leading-none" style="color: #B8C4D0;">Security</h2>
