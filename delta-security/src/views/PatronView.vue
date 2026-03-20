@@ -489,21 +489,8 @@ async function sendDiscordRecap() {
   sendingDiscord.value = true
   discordMsg.value = null
   try {
-    const { data: { session } } = await supabase.auth.getSession()
-    const res = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/weekly-recap`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY
-        },
-        body: '{}'
-      }
-    )
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.error || 'Erreur envoi Discord')
+    const { data, error } = await supabase.functions.invoke('weekly-recap', { body: {} })
+    if (error) throw new Error(error.message || 'Erreur envoi Discord')
     discordMsg.value = { type: 'success', text: `✓ Envoyé · ${data.employees_paid} employé(s)` }
   } catch (e) {
     discordMsg.value = { type: 'error', text: e.message }
