@@ -151,7 +151,7 @@
                     onmouseout="this.style.background='rgba(88,101,242,0.1)'">
               <span v-if="sendingDiscord">...</span>
               <span v-else>
-                <img src="/discord-logo.png" class="inline w-3.5 h-3.5 mr-1" alt="Discord" />
+                <img :src="discordLogo" class="inline w-3.5 h-3.5 mr-1" alt="Discord" />
                 Envoyer sur Discord
               </span>
             </button>
@@ -450,6 +450,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useServicesStore } from '@/stores/services'
 import { supabase } from '@/lib/supabase'
 import { callEdgeFunction } from '@/lib/edgeFunction'
+import discordLogo from '@/publique/discord-logo.png'
 
 const authStore = useAuthStore()
 const servicesStore = useServicesStore()
