@@ -450,7 +450,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useServicesStore } from '@/stores/services'
 import { supabase } from '@/lib/supabase'
 import { callEdgeFunction } from '@/lib/edgeFunction'
-import discordLogo from '@/publique/discord-logo.png'
+import discordLogo from '@/assets/discord-logo.png'
 
 const authStore = useAuthStore()
 const servicesStore = useServicesStore()
