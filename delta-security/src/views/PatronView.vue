@@ -74,7 +74,7 @@
             <button v-if="!activeService" @click="handleStartService" :disabled="actionLoading" class="btn-gold">
               ▶ Prise de service
             </button>
-            <button v-else @click="handleEndService" :disabled="actionLoading"
+            <button v-else @click="showEndModal = true" :disabled="actionLoading"
                     class="font-body font-semibold tracking-widest uppercase text-sm px-6 py-3 rounded-sm transition-all duration-200"
                     style="background: transparent; border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;">
               ⏹ Fin de service
@@ -402,6 +402,26 @@
       </div>
     </div>
 
+    <!-- ── End service comment modal ─────────────────────── -->
+    <div v-if="showEndModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
+         style="background: rgba(0,0,0,0.88);">
+      <div class="ds-card w-full max-w-sm fade-up" style="border-color: rgba(184,196,208,0.2);">
+        <h3 class="font-display text-2xl font-light mb-1" style="color: #F5F5F0;">Fin de service</h3>
+        <p class="text-sm font-body mb-5" style="color: #666;">Ajouter un commentaire (optionnel)</p>
+        <textarea v-model="endComment" class="ds-input resize-none mb-4" rows="3"
+                  placeholder="Rapport de mission, notes particulières..." />
+        <div class="flex gap-3">
+          <button @click="handleEndService" :disabled="actionLoading"
+                  class="flex-1 font-body font-semibold tracking-widest uppercase text-xs py-3 rounded-sm transition-all duration-200"
+                  style="background: transparent; border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;">
+            <span v-if="actionLoading">...</span>
+            <span v-else>⏹ Confirmer la fin</span>
+          </button>
+          <button @click="showEndModal = false" class="btn-ghost flex-1">Annuler</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ── Change own password modal ──────────────────────── -->
     <ChangePasswordModal v-if="showChangePwd"
       :profileName="profile?.full_name"
@@ -587,8 +607,10 @@ async function handleEndService() {
   if (!activeService.value) return
   actionLoading.value = true
   try {
-    await servicesStore.endService(activeService.value.id)
+    await servicesStore.endService(activeService.value.id, endComment.value)
     clearInterval(elapsedTimer)
+    showEndModal.value = false
+    endComment.value = ''
     await servicesStore.fetchAllServices()
   } catch (e) { console.error(e) }
   finally { actionLoading.value = false }
