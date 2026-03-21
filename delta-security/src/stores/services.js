@@ -232,6 +232,36 @@ export const useServicesStore = defineStore('services', () => {
     URL.revokeObjectURL(url)
   }
 
+
+  // ── Avertissements ────────────────────────────────────
+  async function fetchWarnings(agentId = null) {
+    let query = supabase
+      .from('warnings')
+      .select('*, profiles!warnings_agent_id_fkey(full_name, badge_number), patron:profiles!warnings_patron_id_fkey(full_name)')
+      .order('created_at', { ascending: false })
+    if (agentId) query = query.eq('agent_id', agentId)
+    const { data, error } = await query
+    if (!error) warnings.value = data ?? []
+  }
+
+  async function addWarning(agentId, patronId, message, severity = 'warning') {
+    const { data, error } = await supabase
+      .from('warnings')
+      .insert({ agent_id: agentId, patron_id: patronId, message, severity })
+      .select('*, profiles!warnings_agent_id_fkey(full_name, badge_number), patron:profiles!warnings_patron_id_fkey(full_name)')
+      .single()
+    if (error) throw error
+    warnings.value.unshift(data)
+    return data
+  }
+
+  async function deleteWarning(warningId) {
+    const { error } = await supabase.from('warnings').delete().eq('id', warningId)
+    if (error) throw error
+    const idx = warnings.value.findIndex(w => w.id === warningId)
+    if (idx !== -1) warnings.value.splice(idx, 1)
+  }
+
   function formatDuration(minutes) {
     if (!minutes) return '—'
     const h = Math.floor(minutes / 60)
