@@ -499,6 +499,8 @@ const activeTab = ref('services')
 // ── My service ─────────────────────────────────────────────
 const missionLabel = ref('')
 const actionLoading = ref(false)
+const showEndModal  = ref(false)
+const endComment    = ref('')
 const liveElapsed = ref('00:00:00')
 let elapsedTimer = null
 
