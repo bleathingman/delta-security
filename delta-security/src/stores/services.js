@@ -12,6 +12,7 @@ export const useServicesStore = defineStore('services', () => {
   const allServices   = ref([])
   const allProfiles   = ref([])
   const allGrades     = ref([])
+  const warnings      = ref([])
   const activeService = ref(null)
   const loading       = ref(false)
 
