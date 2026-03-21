@@ -39,8 +39,9 @@ body {
   background-image: url('/delta-security-logo.png');
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 55vh;
-  opacity: 0.025;
+  background-size: 50vh;
+  opacity: 0.06;
+  mix-blend-mode: screen;
   pointer-events: none;
   z-index: 0;
 }
@@ -217,4 +218,3 @@ body {
 /* ── Hide scrollbar (tabs mobile) ────────────────────── */
 .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
-

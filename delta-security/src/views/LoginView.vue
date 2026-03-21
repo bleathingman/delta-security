@@ -16,6 +16,7 @@
       </div>
 
       <div class="fade-up">
+        <img :src="logoUrl" alt="Delta Security" class="w-40 mb-6 opacity-90" />
         <div class="flex items-center gap-3 mb-2">
           <div class="w-8 h-px" style="background: #B8C4D0;"></div>
           <span class="text-xs tracking-[0.3em] uppercase font-body" style="color: #B8C4D0;">Établi depuis 2024</span>
@@ -37,6 +38,7 @@
       <div class="w-full max-w-md fade-up delay-100">
 
         <div class="lg:hidden text-center mb-10">
+          <img :src="logoUrl" alt="Delta Security" class="w-24 mx-auto mb-4 opacity-90" />
           <h1 class="font-display text-5xl font-light" style="color: #F5F5F0;">
             Delta <span style="color: #B8C4D0;">Security</span>
           </h1>
@@ -120,6 +122,7 @@ import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const logoUrl = '/delta-security-logo.png'
 
 const username = ref('')
 const password = ref('')
