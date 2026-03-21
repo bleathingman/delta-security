@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen" style="background: #080808;">
+  <div class="min-h-screen logo-bg" style="background: #080808;">
     <NavBar />
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-5 sm:space-y-8">
@@ -109,7 +109,7 @@
             </button>
 
             <button v-else
-                    @click="handleEndService" :disabled="actionLoading"
+@click="showEndModal = true" :disabled="actionLoading"
                     class="w-full sm:w-auto font-body font-semibold tracking-widest uppercase text-sm px-6 sm:px-8 py-3 sm:py-4 rounded-sm transition-all duration-200"
                     style="background: transparent; border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;">
               <span v-if="actionLoading">...</span>
@@ -160,6 +160,26 @@
 
     </div>
 
+    <!-- End service comment modal -->
+    <div v-if="showEndModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
+         style="background: rgba(0,0,0,0.88);">
+      <div class="ds-card w-full max-w-sm fade-up" style="border-color: rgba(184,196,208,0.2);">
+        <h3 class="font-display text-2xl font-light mb-1" style="color: #F5F5F0;">Fin de service</h3>
+        <p class="text-sm font-body mb-5" style="color: #666;">Ajouter un commentaire (optionnel)</p>
+        <textarea v-model="endComment" class="ds-input resize-none mb-4" rows="3"
+                  placeholder="Rapport de mission, notes particulières..." />
+        <div class="flex gap-3">
+          <button @click="handleEndService" :disabled="actionLoading"
+                  class="flex-1 font-body font-semibold tracking-widest uppercase text-xs py-3 rounded-sm transition-all duration-200"
+                  style="background: transparent; border: 1px solid rgba(184,196,208,0.4); color: #B8C4D0;">
+            <span v-if="actionLoading">...</span>
+            <span v-else>⏹ Confirmer la fin</span>
+          </button>
+          <button @click="showEndModal = false" class="btn-ghost flex-1">Annuler</button>
+        </div>
+      </div>
+    </div>
+
     <ChangePasswordModal v-if="showChangePwd"
       :profileName="profile?.full_name"
       @close="showChangePwd = false"
@@ -186,13 +206,15 @@ import { useServicesStore } from '@/stores/services'
 const authStore     = useAuthStore()
 const servicesStore = useServicesStore()
 const { profile }   = storeToRefs(authStore)
-const { myServices, activeService } = storeToRefs(servicesStore)
+const { myServices, activeService, warnings } = storeToRefs(servicesStore)
 
 const missionLabel  = ref('')
 const actionLoading = ref(false)
 const toast         = ref(null)
 const liveElapsed   = ref('00:00:00')
 const showChangePwd = ref(false)
+const showEndModal  = ref(false)
+const endComment    = ref('')
 let elapsedTimer = null
 let toastTimer   = null
 
@@ -221,6 +243,12 @@ const monthlyHours = computed(() => {
     .reduce((a, s) => a + (s.duration_minutes || 0), 0)
   return `${Math.floor(mins / 60)}h${String(mins % 60).padStart(2, '0')}`
 })
+
+const myWarnings = computed(() =>
+  warnings.value.filter(w => w.agent_id === profile.value?.id)
+)
+
+function formatDateShort(iso) { return dayjs(iso).format('DD MMM YYYY') }
 
 const weekStats = computed(() =>
   servicesStore.getMyWeekStats(profile.value?.id, profile.value?.hourly_rate ?? 15)
@@ -259,8 +287,10 @@ async function handleEndService() {
   if (!activeService.value) return
   actionLoading.value = true
   try {
-    await servicesStore.endService(activeService.value.id)
+    await servicesStore.endService(activeService.value.id, endComment.value)
     clearInterval(elapsedTimer)
+    showEndModal.value = false
+    endComment.value = ''
     showToast('Fin de service enregistrée. Bonne récupération.', 'success')
     await servicesStore.fetchMyServices(profile.value.id)
   } catch (e) { showToast(e.message, 'error') }
@@ -277,6 +307,7 @@ onMounted(async () => {
   if (profile.value) {
     await servicesStore.fetchActiveService(profile.value.id)
     await servicesStore.fetchMyServices(profile.value.id)
+    await servicesStore.fetchWarnings(profile.value.id)
     if (activeService.value) startElapsedTimer()
   }
 })

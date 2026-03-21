@@ -241,9 +241,11 @@ export const useServicesStore = defineStore('services', () => {
 
   return {
     myServices, allServices, allProfiles, allGrades, activeService, loading,
+    warnings,
     fetchActiveService, fetchMyServices, fetchAllServices, fetchAllProfiles,
     fetchGrades, updateGradeRate, assignGrade,
     startService, endService,
+    fetchWarnings, addWarning, deleteWarning,
     computeWeeklySalaries, getWeekStats, getMyWeekStats,
     exportSalariesCSV, formatDuration
   }

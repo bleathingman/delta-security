@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen" style="background: #080808;">
+  <div class="min-h-screen logo-bg" style="background: #080808;">
     <NavBar />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-6 sm:space-y-10">
@@ -223,6 +223,11 @@
         </div>
       </div>
 
+      <!-- ── Tab: Avertissements ────────────────────────────── -->
+      <div v-if="activeTab === 'avertissements'" class="fade-up delay-200">
+        <WarningsManager />
+      </div>
+
       <!-- ── Tab: Grades ─────────────────────────────────────── -->
       <div v-if="activeTab === 'grades'" class="fade-up delay-200">
         <GradesManager />
@@ -287,6 +292,10 @@
             <div>
               <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Numéro de badge</label>
               <input v-model="newUser.badge_number" type="text" placeholder="ex: DS-042" class="ds-input" />
+            </div>
+            <div>
+              <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Numéro de téléphone</label>
+              <input v-model="newUser.phone_number" type="text" placeholder="ex: 5551 ou 4381234567" class="ds-input" />
             </div>
             <div>
               <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Grade</label>
@@ -446,6 +455,7 @@ import SalaryTable from '@/components/SalaryTable.vue'
 import ChangePasswordModal from '@/components/ChangePasswordModal.vue'
 import ConfirmModal from '@/components/ConfirmModal.vue'
 import GradesManager from '@/components/GradesManager.vue'
+import WarningsManager from '@/components/WarningsManager.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useServicesStore } from '@/stores/services'
 import { supabase } from '@/lib/supabase'
@@ -460,6 +470,7 @@ const tabs = [
   { id: 'services', label: 'Services' },
   { id: 'salaires', label: 'Salaires' },
   { id: 'equipe', label: 'Équipe' },
+  { id: 'avertissements', label: 'Avertissements' },
   { id: 'grades', label: 'Grades' },
   { id: 'comptes', label: 'Comptes' }
 ]
@@ -502,7 +513,7 @@ async function sendDiscordRecap() {
 }
 
 // ── Create user ────────────────────────────────────────────
-const newUser = ref({ full_name: '', username: '', password: '', role: 'agent', hourly_rate: 15, badge_number: '', grade_id: '' })
+const newUser = ref({ full_name: '', username: '', password: '', role: 'agent', hourly_rate: 15, badge_number: '', grade_id: '', phone_number: '' })
 const creatingUser = ref(false)
 const createMsg = ref(null)
 const showNewPwd = ref(false)
@@ -629,9 +640,9 @@ async function handleCreateUser() {
       const grade = servicesStore.allGrades.find(g => g.id === newUser.value.grade_id)
       if (grade) finalRate = grade.hourly_rate
     }
-    await callEdgeFunction('create-user', { full_name, username, password, role, hourly_rate: finalRate, badge_number, grade_id: newUser.value.grade_id || null })
+    await callEdgeFunction('create-user', { full_name, username, password, role, hourly_rate: finalRate, badge_number, grade_id: newUser.value.grade_id || null, phone_number: newUser.value.phone_number || null })
     createMsg.value = { type: 'success', text: `Compte "${username}" créé avec succès pour ${full_name}.` }
-    newUser.value = { full_name: '', username: '', password: '', role: 'agent', hourly_rate: 15, badge_number: '', grade_id: '' }
+    newUser.value = { full_name: '', username: '', password: '', role: 'agent', hourly_rate: 15, badge_number: '', grade_id: '', phone_number: '' }
     await servicesStore.fetchAllProfiles()
     setTimeout(() => { createMsg.value = null }, 5000)
   } catch (e) {
@@ -686,6 +697,7 @@ onMounted(async () => {
     await servicesStore.fetchAllServices()
     await servicesStore.fetchAllProfiles()
     await servicesStore.fetchGrades()
+    await servicesStore.fetchWarnings()
     if (activeService.value) startElapsedTimer()
   }
   supabase

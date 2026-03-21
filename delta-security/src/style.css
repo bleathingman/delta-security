@@ -28,6 +28,27 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ── Logo watermark background ───────────────────────────── */
+.logo-bg {
+  position: relative;
+}
+.logo-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('/delta-security-logo.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 55vh;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+}
+.logo-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* ── Scrollbar ────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--obsidian); }
@@ -196,3 +217,4 @@ body {
 /* ── Hide scrollbar (tabs mobile) ────────────────────── */
 .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
+

@@ -44,6 +44,12 @@
             </p>
           </div>
         </div>
+
+        <!-- End comment -->
+        <div v-if="service.end_comment" class="mt-3 pt-3" style="border-top: 1px solid #1a1a1a;">
+          <p class="text-xs tracking-[0.1em] uppercase mb-1 font-body" style="color: #555;">Rapport de mission</p>
+          <p class="text-sm font-body italic" style="color: #888;">{{ service.end_comment }}</p>
+        </div>
       </div>
 
       <!-- Right column -->

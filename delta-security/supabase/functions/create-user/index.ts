@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
     if (callerProfile?.role !== 'patron') return json({ error: 'Réservé aux patrons' }, 403)
 
     // Données du nouvel utilisateur
-    const { username, password, full_name, role, hourly_rate, badge_number, grade_id } = await req.json()
+    const { username, password, full_name, role, hourly_rate, badge_number, grade_id, phone_number } = await req.json()
     if (!username || !password || !full_name || !role) {
       return json({ error: 'Champs obligatoires manquants (username, password, full_name, role)' }, 400)
     }
@@ -75,7 +75,7 @@ Deno.serve(async (req) => {
     // Mettre à jour le profil (le trigger l'a déjà créé)
     const { error: profileError } = await admin
       .from('profiles')
-      .update({ full_name, role, hourly_rate: finalHourlyRate, badge_number: badge_number || null, grade_id: finalGradeId })
+      .update({ full_name, role, hourly_rate: finalHourlyRate, badge_number: badge_number || null, grade_id: finalGradeId, phone_number: phone_number || null })
       .eq('id', newUser.user.id)
     if (profileError) throw profileError
 

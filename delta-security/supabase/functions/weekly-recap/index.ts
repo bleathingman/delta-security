@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
     // ── Profils actifs ─────────────────────────────────────
     const { data: profiles } = await admin
       .from('profiles')
-      .select('id, full_name, role, hourly_rate, badge_number, grades(label)')
+      .select('id, full_name, role, hourly_rate, badge_number, phone_number, grades(label)')
       .eq('is_active', true)
       .order('full_name')
 
@@ -69,6 +69,7 @@ Deno.serve(async (req) => {
           total_minutes:  minutes,
           hours:          `${h}h${String(m).padStart(2,'0')}`,
           hourly_rate:    p.hourly_rate,
+          phone:          p.phone_number || '',
           salary
         }
       })
@@ -83,7 +84,12 @@ Deno.serve(async (req) => {
     // ── Embed Discord ──────────────────────────────────────
     const fields = salaries.slice(0, 24).map(e => ({
       name:   `${e.full_name}${e.badge ? ` · #${e.badge}` : ''}`,
-      value:  `${e.grade}\n${e.total_services} service(s) · ${e.hours}\n**💰 ${fmtMoney(e.salary)} $**`,
+      value:  [
+        e.grade,
+        `${e.total_services} service(s) · ${e.hours}`,
+        e.phone ? `📞 ${e.phone}` : '',
+        `**💰 ${fmtMoney(e.salary)} $**`
+      ].filter(Boolean).join('\n'),
       inline: true
     }))
 
