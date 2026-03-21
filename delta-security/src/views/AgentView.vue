@@ -163,7 +163,7 @@
     <!-- End service comment modal -->
     <Teleport to="body"><div v-if="showEndModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
          style="background: rgba(0,0,0,0.88);">
-      <div class="ds-card w-full max-w-sm fade-up" style="border-color: rgba(184,196,208,0.2);">
+      <div class="ds-card w-full max-w-xl fade-up" style="border-color: rgba(184,196,208,0.2);">
         <h3 class="font-display text-2xl font-light mb-1" style="color: #F5F5F0;">Fin de service</h3>
         <p class="text-sm font-body mb-5" style="color: #666;">Ajouter un commentaire (optionnel)</p>
         <textarea v-model="endComment" class="ds-input resize-none mb-4" rows="3"
