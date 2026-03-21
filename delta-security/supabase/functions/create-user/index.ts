@@ -58,10 +58,24 @@ Deno.serve(async (req) => {
       throw createError
     }
 
+    // Auto-assign grade if not provided
+    let finalGradeId = grade_id || null
+    let finalHourlyRate = hourly_rate || 15.00
+
+    if (!finalGradeId) {
+      const slugToFind = role === 'patron' ? 'patron' : 'agent-1'
+      const { data: gradeData } = await admin
+        .from('grades').select('id, hourly_rate').eq('slug', slugToFind).single()
+      if (gradeData) {
+        finalGradeId = gradeData.id
+        finalHourlyRate = gradeData.hourly_rate
+      }
+    }
+
     // Mettre à jour le profil (le trigger l'a déjà créé)
     const { error: profileError } = await admin
       .from('profiles')
-      .update({ full_name, role, hourly_rate: hourly_rate || 15.00, badge_number: badge_number || null, grade_id: grade_id || null })
+      .update({ full_name, role, hourly_rate: finalHourlyRate, badge_number: badge_number || null, grade_id: finalGradeId })
       .eq('id', newUser.user.id)
     if (profileError) throw profileError
 

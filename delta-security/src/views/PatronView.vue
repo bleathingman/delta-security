@@ -151,7 +151,7 @@
                     onmouseout="this.style.background='rgba(88,101,242,0.1)'">
               <span v-if="sendingDiscord">...</span>
               <span v-else>
-                <img :src="discordLogo" class="inline w-3.5 h-3.5 mr-1" alt="Discord" />
+                <span class="mr-1 text-sm">🎮</span>
                 Envoyer sur Discord
               </span>
             </button>
@@ -288,7 +288,7 @@
               <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Numéro de badge</label>
               <input v-model="newUser.badge_number" type="text" placeholder="ex: DS-042" class="ds-input" />
             </div>
-            <div v-if="newUser.role === 'agent'">
+            <div>
               <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #888;">Grade</label>
               <select v-model="newUser.grade_id" class="ds-input">
                 <option value="">— Sélectionner un grade —</option>
@@ -450,7 +450,6 @@ import { useAuthStore } from '@/stores/auth'
 import { useServicesStore } from '@/stores/services'
 import { supabase } from '@/lib/supabase'
 import { callEdgeFunction } from '@/lib/edgeFunction'
-import discordLogo from '@/assets/discord-logo.png'
 
 const authStore = useAuthStore()
 const servicesStore = useServicesStore()
@@ -520,7 +519,7 @@ const deleteTarget = ref(null)
 const weekStats = computed(() => servicesStore.getWeekStats())
 
 // ── Grades ────────────────────────────────────────────
-const agentGrades = computed(() => servicesStore.allGrades.filter(g => g.slug !== 'patron'))
+const agentGrades = computed(() => servicesStore.allGrades)
 
 // ── Computed ───────────────────────────────────────────────
 const liveServices = computed(() => allServices.value.filter(s => s.is_active))
