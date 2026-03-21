@@ -161,7 +161,7 @@
     </div>
 
     <!-- End service comment modal -->
-    <div v-if="showEndModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
+    <Teleport to="body"><div v-if="showEndModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
          style="background: rgba(0,0,0,0.88);">
       <div class="ds-card w-full max-w-sm fade-up" style="border-color: rgba(184,196,208,0.2);">
         <h3 class="font-display text-2xl font-light mb-1" style="color: #F5F5F0;">Fin de service</h3>
@@ -178,7 +178,7 @@
           <button @click="showEndModal = false" class="btn-ghost flex-1">Annuler</button>
         </div>
       </div>
-    </div>
+    </div></Teleport>
 
     <ChangePasswordModal v-if="showChangePwd"
       :profileName="profile?.full_name"
