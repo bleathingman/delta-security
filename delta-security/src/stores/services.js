@@ -13,6 +13,8 @@ export const useServicesStore = defineStore('services', () => {
   const allProfiles   = ref([])
   const allGrades     = ref([])
   const warnings      = ref([])
+  const shifts        = ref([])
+  const timeOffs      = ref([])
   const activeService = ref(null)
   const loading       = ref(false)
 
@@ -233,6 +235,84 @@ export const useServicesStore = defineStore('services', () => {
   }
 
 
+
+  // ── Shifts ────────────────────────────────────────────
+  async function fetchShifts(agentId = null, weekStart = null) {
+    let query = supabase
+      .from('shifts')
+      .select('*, profiles!shifts_agent_id_fkey(full_name, badge_number, grades(label))')
+      .order('start_time')
+    if (agentId) query = query.eq('agent_id', agentId)
+    if (weekStart) {
+      const end = dayjs(weekStart).add(7, 'day').toISOString()
+      query = query.gte('start_time', dayjs(weekStart).toISOString()).lt('start_time', end)
+    }
+    const { data, error } = await query
+    if (!error) shifts.value = data ?? []
+  }
+
+  async function createShift(agentId, createdBy, startTime, endTime, label, note) {
+    const { data, error } = await supabase
+      .from('shifts')
+      .insert({ agent_id: agentId, created_by: createdBy, start_time: startTime, end_time: endTime, label, note })
+      .select('*, profiles!shifts_agent_id_fkey(full_name, badge_number, grades(label))')
+      .single()
+    if (error) throw error
+    shifts.value.push(data)
+    shifts.value.sort((a, b) => new Date(a.start_time) - new Date(b.start_time))
+    return data
+  }
+
+  async function deleteShift(shiftId) {
+    const { error } = await supabase.from('shifts').delete().eq('id', shiftId)
+    if (error) throw error
+    const idx = shifts.value.findIndex(s => s.id === shiftId)
+    if (idx !== -1) shifts.value.splice(idx, 1)
+  }
+
+  // ── Time off ───────────────────────────────────────────
+  async function fetchTimeOffs(agentId = null) {
+    let query = supabase
+      .from('time_off')
+      .select('*, profiles!time_off_agent_id_fkey(full_name, badge_number)')
+      .order('start_date', { ascending: false })
+    if (agentId) query = query.eq('agent_id', agentId)
+    const { data, error } = await query
+    if (!error) timeOffs.value = data ?? []
+  }
+
+  async function requestTimeOff(agentId, startDate, endDate, reason) {
+    const { data, error } = await supabase
+      .from('time_off')
+      .insert({ agent_id: agentId, start_date: startDate, end_date: endDate, reason })
+      .select('*, profiles!time_off_agent_id_fkey(full_name, badge_number)')
+      .single()
+    if (error) throw error
+    timeOffs.value.unshift(data)
+    return data
+  }
+
+  async function reviewTimeOff(timeOffId, status, reviewedBy) {
+    const { data, error } = await supabase
+      .from('time_off')
+      .update({ status, reviewed_by: reviewedBy })
+      .eq('id', timeOffId)
+      .select()
+      .single()
+    if (error) throw error
+    const idx = timeOffs.value.findIndex(t => t.id === timeOffId)
+    if (idx !== -1) timeOffs.value[idx] = { ...timeOffs.value[idx], ...data }
+    return data
+  }
+
+  async function deleteTimeOff(timeOffId) {
+    const { error } = await supabase.from('time_off').delete().eq('id', timeOffId)
+    if (error) throw error
+    const idx = timeOffs.value.findIndex(t => t.id === timeOffId)
+    if (idx !== -1) timeOffs.value.splice(idx, 1)
+  }
+
+
   // ── Avertissements ────────────────────────────────────
   async function fetchWarnings(agentId = null) {
     let query = supabase
@@ -277,6 +357,9 @@ export const useServicesStore = defineStore('services', () => {
     fetchGrades, updateGradeRate, assignGrade,
     startService, endService,
     fetchWarnings, addWarning, deleteWarning,
+    shifts, timeOffs,
+    fetchShifts, createShift, deleteShift,
+    fetchTimeOffs, requestTimeOff, reviewTimeOff, deleteTimeOff,
     computeWeeklySalaries, getWeekStats, getMyWeekStats,
     exportSalariesCSV, formatDuration
   }

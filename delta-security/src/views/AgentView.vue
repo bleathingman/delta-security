@@ -200,6 +200,7 @@ dayjs.locale('fr')
 import NavBar from '@/components/NavBar.vue'
 import ServiceCard from '@/components/ServiceCard.vue'
 import ChangePasswordModal from '@/components/ChangePasswordModal.vue'
+import AgentPlanning from '@/components/AgentPlanning.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useServicesStore } from '@/stores/services'
 

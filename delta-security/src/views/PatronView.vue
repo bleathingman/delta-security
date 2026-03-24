@@ -130,6 +130,11 @@
         </div>
       </div>
 
+      <!-- ── Tab: Planning ──────────────────────────────────── -->
+      <div v-if="activeTab === 'planning'" class="fade-up delay-200">
+        <PlanningManager />
+      </div>
+
       <!-- ── Tab: Salaires ───────────────────────────────────── -->
       <div v-if="activeTab === 'salaires'" class="fade-up delay-200">
 
@@ -497,6 +502,7 @@ import SalaryTable from '@/components/SalaryTable.vue'
 import ChangePasswordModal from '@/components/ChangePasswordModal.vue'
 import ConfirmModal from '@/components/ConfirmModal.vue'
 import GradesManager from '@/components/GradesManager.vue'
+import PlanningManager from '@/components/PlanningManager.vue'
 import WarningsManager from '@/components/WarningsManager.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useServicesStore } from '@/stores/services'
@@ -510,6 +516,7 @@ const { allServices, allProfiles, activeService } = storeToRefs(servicesStore)
 
 const tabs = [
   { id: 'services', label: 'Services' },
+  { id: 'planning', label: 'Planning' },
   { id: 'salaires', label: 'Salaires' },
   { id: 'equipe', label: 'Équipe' },
   { id: 'avertissements', label: 'Avertissements' },
