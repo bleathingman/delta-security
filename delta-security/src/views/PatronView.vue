@@ -98,7 +98,7 @@
             <p class="font-display text-lg font-light" style="color: #444;">Aucun service en cours</p>
           </div>
           <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <ServiceCard v-for="s in liveServices" :key="s.id" :service="s" :showAgent="true" :canDelete="true" @deleted="onServiceDeleted" />
+            <ServiceCard v-for="s in liveServices" :key="s.id" :service="s" :showAgent="true" :canDelete="true" @deleted="onServiceDeleted" @updated="onServiceUpdated" />
           </div>
         </div>
 
@@ -122,7 +122,7 @@
             <div class="w-8 h-8 border-2 border-silver-dark border-t-silver rounded-full animate-spin mx-auto"></div>
           </div>
           <div v-else class="space-y-3">
-            <ServiceCard v-for="s in filteredServices" :key="s.id" :service="s" :showAgent="true" :canDelete="true" @deleted="onServiceDeleted" />
+            <ServiceCard v-for="s in filteredServices" :key="s.id" :service="s" :showAgent="true" :canDelete="true" @deleted="onServiceDeleted" @updated="onServiceUpdated" />
             <div v-if="filteredServices.length === 0" class="ds-card text-center py-8">
               <p class="font-body text-sm" style="color: #555;">Aucun résultat</p>
             </div>
@@ -198,7 +198,29 @@
                 <p class="text-xs font-body" style="color: #555;">Taux horaire</p>
                 <p class="font-display text-lg" style="color: #B8C4D0;">{{ p.hourly_rate }}$/h</p>
               </div>
-              <button @click="openRateEditor(p)" class="btn-ghost text-xs px-3 py-1">Modifier</button>
+              <div class="flex gap-2">
+                <button @click="openRateEditor(p)" class="btn-ghost text-xs px-3 py-1">Taux</button>
+                <button @click="openPhoneEditor(p)" class="btn-ghost text-xs px-3 py-1">📞</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit phone modal -->
+        <div v-if="editingPhone" class="fixed inset-0 z-50 flex items-center justify-center p-4"
+             style="background: rgba(0,0,0,0.85);">
+          <div class="ds-card w-full max-w-sm fade-up">
+            <h3 class="font-display text-2xl font-light mb-1" style="color: #F5F5F0;">Modifier le téléphone</h3>
+            <p class="text-sm font-body mb-5" style="color: #888;">{{ editingPhone.full_name }}</p>
+            <label class="block text-xs tracking-[0.12em] uppercase mb-2 font-body" style="color: #555;">
+              Numéro de téléphone
+            </label>
+            <input v-model="newPhone" type="text" placeholder="ex: 5551 ou 4381234567" class="ds-input mb-5" />
+            <div class="flex gap-3">
+              <button @click="savePhone" class="btn-gold flex-1" :disabled="savingPhone">
+                {{ savingPhone ? '...' : 'Enregistrer' }}
+              </button>
+              <button @click="editingPhone = null" class="btn-ghost flex-1">Annuler</button>
             </div>
           </div>
         </div>
@@ -508,6 +530,26 @@ let elapsedTimer = null
 const searchQuery = ref('')
 const filterStatus = ref('')
 
+// ── Edit phone ────────────────────────────────────────────
+const editingPhone = ref(null)
+const newPhone     = ref('')
+const savingPhone  = ref(false)
+
+function openPhoneEditor(p) { editingPhone.value = p; newPhone.value = p.phone_number || '' }
+
+async function savePhone() {
+  if (!editingPhone.value) return
+  savingPhone.value = true
+  const { error } = await supabase
+    .from('profiles').update({ phone_number: newPhone.value || null }).eq('id', editingPhone.value.id)
+  if (!error) {
+    const idx = allProfiles.value.findIndex(p => p.id === editingPhone.value.id)
+    if (idx !== -1) allProfiles.value[idx].phone_number = newPhone.value || null
+  }
+  savingPhone.value = false
+  editingPhone.value = null
+}
+
 // ── Edit rate ──────────────────────────────────────────────
 const editingProfile = ref(null)
 const newRate = ref(0)
@@ -623,6 +665,11 @@ async function loadAll() { await servicesStore.fetchAllServices() }
 function onServiceDeleted(serviceId) {
   const idx = servicesStore.allServices.findIndex(s => s.id === serviceId)
   if (idx !== -1) servicesStore.allServices.splice(idx, 1)
+}
+
+function onServiceUpdated(updated) {
+  const idx = servicesStore.allServices.findIndex(s => s.id === updated.id)
+  if (idx !== -1) Object.assign(servicesStore.allServices[idx], updated)
 }
 
 // ── Edit hourly rate ───────────────────────────────────────

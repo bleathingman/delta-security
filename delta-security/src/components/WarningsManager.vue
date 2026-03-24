@@ -60,13 +60,31 @@
     </div>
 
     <!-- Warnings list -->
-    <div v-if="warnings.length === 0" class="ds-card text-center py-10">
+    <!-- Filter bar -->
+    <div class="flex gap-3 mb-4 flex-wrap">
+      <select v-model="filterAgent" class="ds-input" style="max-width: 220px;">
+        <option value="">Tous les agents</option>
+        <option v-for="p in agentProfiles" :key="p.id" :value="p.id">
+          {{ p.full_name }}{{ p.badge_number ? ` · #${p.badge_number}` : '' }}
+        </option>
+      </select>
+      <select v-model="filterSeverity" class="ds-input" style="max-width: 180px;">
+        <option value="">Tous les types</option>
+        <option value="warning">Avertissement</option>
+        <option value="blame">Blâme</option>
+        <option value="suspension">Suspension</option>
+      </select>
+      <button v-if="filterAgent || filterSeverity" @click="filterAgent = ''; filterSeverity = ''"
+              class="btn-ghost text-xs px-3 py-2">✕ Réinitialiser</button>
+    </div>
+
+    <div v-if="filteredWarnings.length === 0" class="ds-card text-center py-10">
       <p class="font-display text-xl font-light" style="color: #444;">Aucun avertissement</p>
       <p class="text-sm font-body mt-1" style="color: #555;">L'équipe est au vert 🟢</p>
     </div>
 
-    <div v-else class="space-y-3">
-      <div v-for="w in warnings" :key="w.id" class="ds-card"
+    <div v-else-if="filteredWarnings.length > 0" class="space-y-3">
+      <div v-for="w in filteredWarnings" :key="w.id" class="ds-card"
            :style="`border-color: ${severityStyle(w.severity).border};`">
         <div class="flex items-start justify-between gap-4">
           <div class="flex-1 min-w-0">
@@ -123,6 +141,16 @@ const severities = [
 function severityStyle(s) {
   return severities.find(x => x.value === s) || severities[0]
 }
+
+const filterAgent    = ref('')
+const filterSeverity = ref('')
+
+const filteredWarnings = computed(() => {
+  let list = warnings.value
+  if (filterAgent.value)    list = list.filter(w => w.agent_id === filterAgent.value)
+  if (filterSeverity.value) list = list.filter(w => w.severity === filterSeverity.value)
+  return list
+})
 
 const form = ref({ agentId: '', message: '', severity: 'warning' })
 const submitting = ref(false)
